@@ -1,0 +1,7 @@
+{
+  "name": "skyrim-potion-optimizer",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
