@@ -12,7 +12,6 @@ import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, triangle } from 'ionicons/icons';
 import { Redirect, Route } from 'react-router-dom';
 import { RecipesTab } from './pages/RecipesTab';
-import Tab3 from './pages/Tab3';
 import { WatchListTab } from './pages/WatchListTab';
 
 /* Core CSS required for Ionic components to work properly */
@@ -46,9 +45,6 @@ const App: React.FC = () => (
           </Route>
           <Route exact path="/watchlist">
             <WatchListTab />
-          </Route>
-          <Route path="/tab3">
-            <Tab3 />
           </Route>
           <Route exact path="/">
             <Redirect to="/tab1" />
