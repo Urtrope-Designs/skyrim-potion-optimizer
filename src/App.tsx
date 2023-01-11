@@ -41,13 +41,13 @@ const App: React.FC = () => (
       <IonTabs>
         <IonRouterOutlet>
           <Route exact path="/recipes">
-            <RecipesTab />
+            <RecipesTab/>
           </Route>
           <Route exact path="/watchlist">
-            <WatchListTab />
+            <WatchListTab/>
           </Route>
           <Route exact path="/">
-            <Redirect to="/tab1" />
+            <Redirect to="/watchlist" />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
