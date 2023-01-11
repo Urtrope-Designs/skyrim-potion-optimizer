@@ -29,13 +29,13 @@ export const WatchListTab: React.FC = () => {
           <IonTitle>Ingredient Watch List</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className='ion-padding'>
+      <IonContent>
         {
           ingredients.length 
             ? ingredients.map(ingredient => (
                 <IonItem>{ ingredient }</IonItem>
               ))
-            : <p>Head to the <IonRouterLink routerLink='/recipes' routerDirection='none'>Recipes</IonRouterLink> tab to select the ingredients to watch for.</p>
+            : <p className='ion-padding'>Head to the <IonRouterLink routerLink='/recipes' routerDirection='none'>Recipes</IonRouterLink> tab to select the ingredients to watch for.</p>
 
         }
       </IonContent>
