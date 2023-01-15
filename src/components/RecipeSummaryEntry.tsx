@@ -1,15 +1,15 @@
 import { IonCheckbox, IonItem, IonLabel } from "@ionic/react";
 import { IRecipe } from "../types/Recipe";
 
-interface RecipeListProps {
+interface RecipeSummaryEntryProps {
   recipe: IRecipe & {isSelected: boolean};
-  updateRecipeSelection: (recipeToUpdate: IRecipe) => void;
+  updateRecipeSelection: (recipeToUpdate: IRecipe, isChecked: boolean) => void;
 }
 
-export const RecipeSummaryEntry: React.FC<RecipeListProps> = ({ recipe, updateRecipeSelection }) => {
+export const RecipeSummaryEntry: React.FC<RecipeSummaryEntryProps> = ({ recipe, updateRecipeSelection }) => {
   return (
     <IonItem>
-        <IonCheckbox slot="start" checked={recipe.isSelected} onIonChange={() => updateRecipeSelection(recipe)}></IonCheckbox>
+        <IonCheckbox slot="start" checked={recipe.isSelected} onIonChange={(event) => updateRecipeSelection(recipe, event.detail.checked)}></IonCheckbox>
         <IonLabel>{recipe.ingredients.join(', ')}</IonLabel>
     </IonItem>
   );

@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonItem, IonPage, IonRouterLink, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonItem, IonList, IonPage, IonRouterLink, IonTitle, IonToolbar } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { dataManager } from '../services/DataManager';
 import { IRecipe } from '../types/Recipe';
@@ -32,9 +32,13 @@ export const WatchListTab: React.FC = () => {
       <IonContent>
         {
           ingredients.length 
-            ? ingredients.map(ingredient => (
-                <IonItem>{ ingredient }</IonItem>
-              ))
+            ? <IonList>
+              {
+                ingredients.map(ingredient => (
+                  <IonItem key={ingredient}>{ ingredient }</IonItem>
+                ))
+              }
+            </IonList>
             : <p className='ion-padding'>Head to the <IonRouterLink routerLink='/recipes' routerDirection='none'>Recipes</IonRouterLink> tab to select the ingredients to watch for.</p>
 
         }
