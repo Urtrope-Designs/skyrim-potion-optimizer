@@ -1,14 +1,19 @@
-import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonCheckbox, IonContent, IonHeader, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { useState, useEffect } from 'react';
 import { RecipeSummaryEntry } from '../components/RecipeSummaryEntry';
 import { dataManager } from '../services/DataManager';
 import { IRecipe } from '../types/Recipe';
+import { BEST_RECIPES } from '../utils/constants';
 import './RecipesTab.css';
 
 export const RecipesTab: React.FC = () => {
   const [selectedRecipes, setSelectedRecipes] = useState<IRecipe[]>([]);
   
   useEffect(() => {dataManager.selectedRecipes$.subscribe(setSelectedRecipes)}, []);
+
+  const toggleAllRecipes = (isChecked: boolean) => {
+    isChecked ? dataManager.setSelectedRecipes(BEST_RECIPES) : dataManager.setSelectedRecipes([]);
+  }
   
   return (
     <IonPage>
@@ -18,10 +23,16 @@ export const RecipesTab: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <IonItem>
+          <IonCheckbox slot="start" checked={selectedRecipes.length === BEST_RECIPES.length} onIonChange={event => toggleAllRecipes(event.detail.checked)}></IonCheckbox>
+          <IonLabel>
+            <h2>Toggle All</h2>
+          </IonLabel>
+        </IonItem>
         <IonList>
           {
               getRecipesWithSelection(selectedRecipes).map(recipe => {
-                  return <RecipeSummaryEntry key={recipe.ingredients.join(',')} recipe={recipe} updateRecipeSelection={dataManager.updateRecipeSelection}></RecipeSummaryEntry>
+                  return <RecipeSummaryEntry key={recipe.id} recipe={recipe} updateRecipeSelection={dataManager.updateRecipeSelection}></RecipeSummaryEntry>
               })
           }
         </IonList> 
@@ -31,7 +42,7 @@ export const RecipesTab: React.FC = () => {
 };
 
 function getRecipesWithSelection(selectedRecipes: IRecipe[]): (IRecipe & {isSelected: boolean})[] {
-  return TEST_RECIPES.map(recipe => {
+  return BEST_RECIPES.map(recipe => {
     return {
       ...recipe,
       isSelected: selectedRecipes.some(sR => sR.ingredients.join() === recipe.ingredients.join()),
@@ -40,17 +51,3 @@ function getRecipesWithSelection(selectedRecipes: IRecipe[]): (IRecipe & {isSele
 }
 
 
-const TEST_RECIPES: IRecipe[] = [
-  {
-    standardEffects: [],
-    ingredients: ['Bear Claws', 'Giant\'s Toe', 'Hanging Moss'],
-  },
-  {
-    standardEffects: [],
-    ingredients: ['Blue Butterfly Wing', 'Blue Mountain Flower', 'Giant\'s Toe'],
-  },
-  {
-    standardEffects: [],
-    ingredients: ['Creep Cluster', 'Giant\'s Toe', 'Hanging Moss'],
-  },
-]

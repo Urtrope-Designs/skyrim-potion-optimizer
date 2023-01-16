@@ -67,13 +67,13 @@ export const App: React.FC = () => {
               </Route>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
-              <IonTabButton tab="recipes" href="/recipes">
-                <IonIcon icon={triangle} />
-                <IonLabel>Recipes</IonLabel>
-              </IonTabButton>
               <IonTabButton tab="watchList" href="/watchlist">
                 <IonIcon icon={ellipse} />
                 <IonLabel>Watch List</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="recipes" href="/recipes">
+                <IonIcon icon={triangle} />
+                <IonLabel>Recipes</IonLabel>
               </IonTabButton>
             </IonTabBar>
           </IonTabs>

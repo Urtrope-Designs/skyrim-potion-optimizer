@@ -7,7 +7,7 @@ describe('DataManager', () => {
         dataManager.setSelectedRecipes([]);
     });
     
-    const testRecipe: IRecipe = {ingredients: ['ingredient1', 'ingredient2'], standardEffects: []};
+    const testRecipe: IRecipe = {id: 0, ingredients: ['ingredient1', 'ingredient2'], standardEffects: []};
     let selectedRecipesSubsciption: Subscription;
 
     afterEach(() => {

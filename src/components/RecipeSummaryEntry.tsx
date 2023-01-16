@@ -10,7 +10,11 @@ export const RecipeSummaryEntry: React.FC<RecipeSummaryEntryProps> = ({ recipe, 
   return (
     <IonItem>
         <IonCheckbox slot="start" checked={recipe.isSelected} onIonChange={(event) => updateRecipeSelection(recipe, event.detail.checked)}></IonCheckbox>
-        <IonLabel>{recipe.ingredients.join(', ')}</IonLabel>
+        <IonLabel>
+          <h3>{recipe.ingredients.join(', ')}</h3>
+          {recipe.standardEffects.length > 0 && <p>Effects: {recipe.standardEffects.join(', ')}</p>}
+        </IonLabel>
+
     </IonItem>
   );
 };
