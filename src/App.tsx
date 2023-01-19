@@ -15,7 +15,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { RecipesTab } from './pages/RecipesTab';
 import { WatchListTab } from './pages/WatchListTab';
 import { storage } from './services/Storage';
-import { STORAGE_KEY_SELECTED_RECIPES } from './utils/constants';
+import { BEST_RECIPES, STORAGE_KEY_SELECTED_RECIPES } from './utils/constants';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -35,6 +35,7 @@ import '@ionic/react/css/text-transformation.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import './App.css';
 import { dataManager } from './services/DataManager';
 import { distinctUntilChanged, skip } from 'rxjs';
 
@@ -83,11 +84,12 @@ export const App: React.FC = () => {
 };
 
 async function initializeApp() {
-  const recipes = await storage.get(STORAGE_KEY_SELECTED_RECIPES)
-  if (recipes) {
+  const recipeIds: number[] = await storage.get(STORAGE_KEY_SELECTED_RECIPES)
+  if (recipeIds) {
+    const recipes = BEST_RECIPES.filter(r => recipeIds.includes(r.id));
     dataManager.setSelectedRecipes(recipes);
   }
   dataManager.selectedRecipes$.pipe(skip(1), distinctUntilChanged()).subscribe(recipes => {
-    storage.set(STORAGE_KEY_SELECTED_RECIPES, recipes)
+    storage.set(STORAGE_KEY_SELECTED_RECIPES, recipes.map(r => r.id))
   });
 }

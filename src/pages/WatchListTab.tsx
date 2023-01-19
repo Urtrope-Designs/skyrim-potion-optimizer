@@ -1,10 +1,13 @@
-import { IonCard, IonCardHeader, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonList, IonPage, IonRouterLink, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { AlertButton, IonButton, IonCard, IonCardHeader, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonPage, IonRouterLink, IonRow, IonTitle, IonToolbar, useIonAlert } from '@ionic/react';
+import { trash } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
+import { take } from 'rxjs/operators';
 import { dataManager } from '../services/DataManager';
 import { IRecipe } from '../types/Recipe';
 import './WatchListTab.css';
 
 export const WatchListTab: React.FC = () => {
+  const [presentAlert] = useIonAlert();
   const [ingredients, setIngredients] = useState<string[]>([]);
 
   useEffect(() => {dataManager.selectedRecipes$.subscribe(handleRecipesUpdate)}, []);
@@ -31,15 +34,29 @@ export const WatchListTab: React.FC = () => {
       </IonHeader>
       <IonContent>
         {
-          ingredients.length 
+          ingredients?.length 
             ? <IonGrid>
                 <IonRow>
                 {
                   ingredients.map(ingredient => (
                     <IonCol size='12' size-sm='6' size-lg='3'>
                       <IonCard key={ingredient}>
-                        <IonCardHeader>
-                          { ingredient }
+                        <IonCardHeader class='display-flex ion-justify-content-between'>
+                          <IonTitle>
+                            { ingredient }
+                          </IonTitle>
+                          <IonButton
+                            fill='clear' shape='round' color='danger'
+                            onClick={() => 
+                              presentAlert({
+                                header: 'Are you sure?',
+                                message: 'This will de-select all recipes that include this ingredient',
+                                buttons: buildRemoveConfirmationButtons(ingredient)
+                              })
+                            }
+                          >
+                            <IonIcon slot="icon-only" icon={trash}></IonIcon>
+                          </IonButton>
                         </IonCardHeader>
                       </IonCard>
                     </IonCol>
@@ -48,10 +65,28 @@ export const WatchListTab: React.FC = () => {
               </IonRow>
             </IonGrid>
             : <p className='ion-padding'>Head to the <IonRouterLink routerLink='/recipes' routerDirection='none'>Recipes</IonRouterLink> tab to select the ingredients to watch for.</p>
-
         }
       </IonContent>
     </IonPage>
   );
 };
 
+const buildRemoveConfirmationButtons = (ingredient: string) => {
+  const buttons: AlertButton[] = [
+    {
+      text: 'Cancel',
+      role: 'cancel',
+    },
+    {
+      text: 'Remove',
+      role: 'confirm',
+      handler: () => {
+        dataManager.selectedRecipes$.pipe(take(1)).subscribe(recipes => {
+          dataManager.setSelectedRecipes(recipes.filter(r => !r.ingredients.includes(ingredient)))
+        })
+      }
+    }
+  ];
+
+  return buttons;
+}
