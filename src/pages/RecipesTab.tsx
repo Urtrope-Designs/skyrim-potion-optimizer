@@ -11,8 +11,8 @@ export const RecipesTab: React.FC = () => {
   
   useEffect(() => {dataManager.selectedRecipes$.subscribe(setSelectedRecipes)}, []);
 
-  const toggleAllRecipes = (isChecked: boolean) => {
-    isChecked ? dataManager.setSelectedRecipes(BEST_RECIPES) : dataManager.setSelectedRecipes([]);
+  const toggleAllRecipes = () => {
+    selectedRecipes.length === BEST_RECIPES.length ? dataManager.setSelectedRecipes([]) : dataManager.setSelectedRecipes(BEST_RECIPES);
   }
   
   return (
@@ -24,7 +24,7 @@ export const RecipesTab: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <IonItem>
-          <IonCheckbox slot="start" checked={selectedRecipes.length === BEST_RECIPES.length} onIonChange={event => toggleAllRecipes(event.detail.checked)}></IonCheckbox>
+          <IonCheckbox slot="start" checked={selectedRecipes.length === BEST_RECIPES.length} onClick={() => toggleAllRecipes()}></IonCheckbox>
           <IonLabel>
             <h2>Toggle All</h2>
           </IonLabel>
