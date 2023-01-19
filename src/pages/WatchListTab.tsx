@@ -1,4 +1,4 @@
-import { AlertButton, IonButton, IonCard, IonCardHeader, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonPage, IonRouterLink, IonRow, IonTitle, IonToolbar, useIonAlert } from '@ionic/react';
+import { ActionSheetButton, IonButton, IonCard, IonCardHeader, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonPage, IonRouterLink, IonRow, IonTitle, IonToolbar, useIonActionSheet } from '@ionic/react';
 import { trash } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { take } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import { IRecipe } from '../types/Recipe';
 import './WatchListTab.css';
 
 export const WatchListTab: React.FC = () => {
-  const [presentAlert] = useIonAlert();
+  const [present] = useIonActionSheet();
   const [ingredients, setIngredients] = useState<string[]>([]);
 
   useEffect(() => {dataManager.selectedRecipes$.subscribe(handleRecipesUpdate)}, []);
@@ -48,9 +48,9 @@ export const WatchListTab: React.FC = () => {
                           <IonButton
                             fill='clear' shape='round' color='danger'
                             onClick={() => 
-                              presentAlert({
+                              present({
                                 header: 'Are you sure?',
-                                message: 'This will de-select all recipes that include this ingredient',
+                                subHeader: 'This will de-select all recipes that include this ingredient',
                                 buttons: buildRemoveConfirmationButtons(ingredient)
                               })
                             }
@@ -72,7 +72,7 @@ export const WatchListTab: React.FC = () => {
 };
 
 const buildRemoveConfirmationButtons = (ingredient: string) => {
-  const buttons: AlertButton[] = [
+  const buttons: ActionSheetButton[] = [
     {
       text: 'Cancel',
       role: 'cancel',
