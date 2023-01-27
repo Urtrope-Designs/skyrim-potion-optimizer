@@ -1,6 +1,30 @@
+import { IDLCInstance } from "../types/DLCInstance";
 import { IRecipe } from "../types/Recipe";
 
+export const STORAGE_KEY_INCLUDED_DLCS = 'SPO_SK_INCLUDED_DLCS';
 export const STORAGE_KEY_SELECTED_RECIPES = 'SPO_SK_SELECTED_RECIPES';
+export const DLC_MAPPINGS: IDLCInstance[] = [
+    {
+        id: 0,
+        name: 'Dawnguard',
+        ingredients: [],
+    },
+    {
+        id: 1,
+        name: 'Dragonborn',
+        ingredients: [],
+    },
+    {
+        id: 2,
+        name: 'Hearthfire',
+        ingredients: [],
+    },
+    {
+        id: 3,
+        name: 'Creation Club',
+        ingredients: [],
+    },
+];
 export const BEST_RECIPES: IRecipe[] = [
     {
         id: 0,

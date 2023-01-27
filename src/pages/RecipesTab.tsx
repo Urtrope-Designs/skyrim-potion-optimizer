@@ -1,12 +1,15 @@
-import { IonCheckbox, IonContent, IonHeader, IonItem, IonLabel, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { useState, useEffect } from 'react';
+import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonModal, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { settings } from 'ionicons/icons';
+import { useState, useEffect, useRef } from 'react';
 import { RecipeSummaryEntry } from '../components/RecipeSummaryEntry';
+import { UserSettings } from '../components/UserSettings';
 import { dataManager } from '../services/DataManager';
 import { IRecipe } from '../types/Recipe';
 import { BEST_RECIPES } from '../utils/constants';
 import './RecipesTab.css';
 
 export const RecipesTab: React.FC = () => {
+  const settingsModal = useRef<HTMLIonModalElement>(null);
   const [selectedRecipes, setSelectedRecipes] = useState<IRecipe[]>([]);
   
   useEffect(() => {dataManager.selectedRecipes$.subscribe(setSelectedRecipes)}, []);
@@ -19,6 +22,11 @@ export const RecipesTab: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot='primary'>
+            <IonButton id='settings-toggle'>
+              <IonIcon slot='icon-only' icon={settings}></IonIcon>
+            </IonButton>
+          </IonButtons>
           <IonTitle>Potion Recipes</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -36,6 +44,9 @@ export const RecipesTab: React.FC = () => {
               })
           }
         </IonList> 
+        <IonModal ref={settingsModal} trigger='settings-toggle'>
+          <UserSettings dismiss={() => (settingsModal.current?.dismiss())}></UserSettings>
+        </IonModal>
       </IonContent>
     </IonPage>
   );
