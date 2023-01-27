@@ -94,6 +94,8 @@ async function initializeValuesFromStorage() {
   if (DLCIds) {
     const DLCs = DLC_MAPPINGS.filter(dlcM => DLCIds.includes(dlcM.id));
     dataManager.setIncludedDLCs(DLCs);
+  } else {
+    dataManager.setIncludedDLCs(DLC_MAPPINGS);
   }
   if (recipeIds) {
     const recipes = BEST_RECIPES.filter(r => recipeIds.includes(r.id));
