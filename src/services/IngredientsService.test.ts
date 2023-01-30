@@ -1,3 +1,4 @@
+import { IIngredientViewmodel } from "../types/IngredientViewmodel";
 import { TEST_INGREDIENTS } from "../utils/TestUtils";
 import { ingredientsService } from "./IngredientsService";
 
@@ -20,6 +21,21 @@ describe('ingredientsService', () => {
     });
 
     describe('#getIngredientViewmodels', () => {
-        test.todo('test this function');
+        test('builds ingredient viewmodels', () => {
+            const testIngredients = TEST_INGREDIENTS.slice(0,2);
+            const expectedVM: IIngredientViewmodel[] = [
+                {
+                    ingredientId: testIngredients[0].id,
+                    ingredientName: testIngredients[0].name,
+                },
+                {
+                    ingredientId: testIngredients[1].id,
+                    ingredientName: testIngredients[1].name,
+                },
+            ]
+            const result = ingredientsService.getIngredientViewmodels(testIngredients);
+    
+            expect(result).toEqual(expectedVM);
+        });
     });
 });
