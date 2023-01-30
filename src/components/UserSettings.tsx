@@ -2,17 +2,23 @@ import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, Ion
 import { close } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { dataManager } from "../services/DataManager";
-import { IDLCInstance } from "../types/DLCInstance";
-import { DLC_MAPPINGS } from "../utils/constants";
+import { dLCService } from "../services/DLCService";
+import { IDLCViewmodel } from "../types/DLCViewmodel";
+import { ALL_DLC_INSTANCES } from "../utils/constants";
 
 interface UserSettingsProps {
     dismiss?: () => void;
 }
 
 export const UserSettings: React.FC<UserSettingsProps> = ({dismiss}) => {
-    const [includedDLCs, updateIncludedDLCs] = useState<IDLCInstance[]>([]);
+    const [dLCs, updateDLCs] = useState<IDLCViewmodel[]>([]);
 
-    useEffect(() => {dataManager.includedDLCs$.subscribe(updateIncludedDLCs)}, []);
+    useEffect(() => {
+        dataManager.includedDLCIds$.subscribe(includedDLCIds => {
+            const dLCVMs = dLCService.getDLCViewmodels(ALL_DLC_INSTANCES, includedDLCIds);
+            updateDLCs(dLCVMs)
+        })
+    }, []);
 
     return (
         <>
@@ -34,11 +40,11 @@ export const UserSettings: React.FC<UserSettingsProps> = ({dismiss}) => {
                         <IonLabel>DLCs</IonLabel>
                     </IonListHeader>
                     { 
-                        DLC_MAPPINGS.map(DLC => {
+                        dLCs.map(dLC => {
                             return (
-                                <IonItem key={DLC.id}>
-                                    <IonCheckbox slot='start' checked={includedDLCs.some(dlc => dlc.id === DLC.id)} onIonChange={(event) => dataManager.updateDLCInclusion(DLC, event.detail.checked)}></IonCheckbox>
-                                    <IonLabel>{DLC.name}</IonLabel>
+                                <IonItem key={dLC.dLCId}>
+                                    <IonCheckbox slot='start' checked={dLC.isSelected} onIonChange={(event) => dataManager.updateDLCInclusion(dLC.dLCId, event.detail.checked)}></IonCheckbox>
+                                    <IonLabel>{dLC.dLCName}</IonLabel>
                                 </IonItem>
                             )
                         })

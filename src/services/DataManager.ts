@@ -1,32 +1,30 @@
 import { BehaviorSubject } from 'rxjs';
-import { IDLCInstance } from '../types/DLCInstance';
-import { IRecipe } from "../types/Recipe";
 
-const _includedDLCs$: BehaviorSubject<IDLCInstance[]> = new BehaviorSubject<IDLCInstance[]>([]);
-const _selectedRecipes$: BehaviorSubject<IRecipe[]> = new BehaviorSubject<IRecipe[]>([]);
+const _includedDLCIds$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+const _selectedRecipeIds$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
 
 export const dataManager = {
-    includedDLCs$: _includedDLCs$.asObservable(),
-    selectedRecipes$: _selectedRecipes$.asObservable(),
-    setIncludedDLCs: (newDLCs: IDLCInstance[]) => _includedDLCs$.next(newDLCs),
-    setSelectedRecipes: (newRecipes: IRecipe[]) => _selectedRecipes$.next(newRecipes),
-    updateDLCInclusion: (dLCToUpdate: IDLCInstance, isSelected: boolean) => {
-        const curIncludedDLCs = _includedDLCs$.value;
+    includedDLCIds$: _includedDLCIds$.asObservable(),
+    selectedRecipeIds$: _selectedRecipeIds$.asObservable(),
+    setIncludedDLCIds: (newDLCs: number[]) => _includedDLCIds$.next(newDLCs),
+    setSelectedRecipeIds: (newRecipeIds: number[]) => _selectedRecipeIds$.next(newRecipeIds),
+    updateDLCInclusion: (dLCIdToUpdate: number, isSelected: boolean) => {
+        const curIncludedDLCIds = _includedDLCIds$.value;
 
-        if (isSelected && !curIncludedDLCs.some(dlc => dlc.id === dLCToUpdate.id)) {
-            _includedDLCs$.next([...curIncludedDLCs, dLCToUpdate]);
-        } else if (!isSelected && curIncludedDLCs.some(dlc => dlc.id === dLCToUpdate.id)) {
-            _includedDLCs$.next(curIncludedDLCs.filter(dLC => dLC !== dLCToUpdate));
+        if (isSelected && !curIncludedDLCIds.includes(dLCIdToUpdate)) {
+            _includedDLCIds$.next([...curIncludedDLCIds, dLCIdToUpdate]);
+        } else if (!isSelected && curIncludedDLCIds.includes(dLCIdToUpdate)) {
+            _includedDLCIds$.next(curIncludedDLCIds.filter(dLC => dLC !== dLCIdToUpdate));
         }
     },
-    updateRecipeSelection: (recipeToUpdate: IRecipe, isSelected?: boolean) => {
-        const curSelectedRecipes = _selectedRecipes$.value;
-        const existingRecipe = curSelectedRecipes.find(r => r.ingredients.join() === recipeToUpdate.ingredients.join());
+    updateRecipeSelection: (recipeIdToUpdate: number, isSelected?: boolean) => {
+        const curSelectedRecipeIds = _selectedRecipeIds$.value;
+        const isRecipeIdExisting = curSelectedRecipeIds.includes(recipeIdToUpdate);
 
-        if (existingRecipe && isSelected !== true) {
-            _selectedRecipes$.next(curSelectedRecipes.filter(eR => eR.ingredients.join() !== existingRecipe?.ingredients.join()));
-        } else if (!existingRecipe && isSelected !== false) {
-            _selectedRecipes$.next([...curSelectedRecipes, recipeToUpdate]);
+        if (isRecipeIdExisting && isSelected !== true) {
+            _selectedRecipeIds$.next(curSelectedRecipeIds.filter(eR => eR !== recipeIdToUpdate));
+        } else if (!isRecipeIdExisting && isSelected !== false) {
+            _selectedRecipeIds$.next([...curSelectedRecipeIds, recipeIdToUpdate]);
         }
     }
 }

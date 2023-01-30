@@ -1,7 +1,6 @@
 import { Observable, skip, Subscription } from "rxjs";
 import { IDLCInstance } from "../types/DLCInstance";
-import { IRecipe } from "../types/Recipe";
-import { DLC_MAPPINGS } from "../utils/constants";
+import { ALL_DLC_INSTANCES } from "../utils/constants";
 import { dataManager } from "./DataManager";
 
 describe('DataManager', () => {
@@ -11,52 +10,52 @@ describe('DataManager', () => {
 
     describe('Selected Recipes', () => {
         afterAll(() => {
-            dataManager.setSelectedRecipes([]);
+            dataManager.setSelectedRecipeIds([]);
         });
         
-        const testRecipe: IRecipe = {id: 0, ingredients: ['ingredient1', 'ingredient2'], standardEffects: []};
-        let selectedRecipesSubsciption: Subscription;
+        let selectedRecipeIdsSubscription: Subscription;
+        const testRecipeId = 0;
 
         afterEach(() => {
-            if (selectedRecipesSubsciption) {
-                selectedRecipesSubsciption.unsubscribe();
+            if (selectedRecipeIdsSubscription) {
+                selectedRecipeIdsSubscription.unsubscribe();
             }
         });
         
         describe('non-existing recipe', () => {
             beforeEach(() => {
-                dataManager.setSelectedRecipes([]);
+                dataManager.setSelectedRecipeIds([]);
             });
 
             test('adds a non-existing recipe without the isSelected flag', done => {
-                selectedRecipesSubsciption = skipReplay(dataManager.selectedRecipes$).subscribe(recipes => {
+                selectedRecipeIdsSubscription = skipReplay(dataManager.selectedRecipeIds$).subscribe(recipeIds => {
                     try {
-                        expect(recipes).toEqual(expect.arrayContaining([testRecipe]));
+                        expect(recipeIds).toEqual(expect.arrayContaining([testRecipeId]));
                         done();
                     } catch (error) {
                         done(error);
                     }
                 });
 
-                dataManager.updateRecipeSelection(testRecipe);
+                dataManager.updateRecipeSelection(testRecipeId);
             });
             test('adds a non-existing recipe with the isSelected flag', done => {
-                selectedRecipesSubsciption = skipReplay(dataManager.selectedRecipes$).subscribe(recipes => {
+                selectedRecipeIdsSubscription = skipReplay(dataManager.selectedRecipeIds$).subscribe(recipes => {
                     try {
-                        expect(recipes).toEqual(expect.arrayContaining([testRecipe]));
+                        expect(recipes).toEqual(expect.arrayContaining([testRecipeId]));
                         done();
                     } catch (error) {
                         done(error);
                     }
                 });
 
-                dataManager.updateRecipeSelection(testRecipe, true);
+                dataManager.updateRecipeSelection(testRecipeId, true);
             });
             test('does nothing with a non-existing recipe and isSelected set to false', done => {
                 let wasCalled = false;
-                selectedRecipesSubsciption = skipReplay(dataManager.selectedRecipes$).subscribe(() => wasCalled = true);
+                selectedRecipeIdsSubscription = skipReplay(dataManager.selectedRecipeIds$).subscribe(() => wasCalled = true);
 
-                dataManager.updateRecipeSelection(testRecipe, false);
+                dataManager.updateRecipeSelection(testRecipeId, false);
 
                 setTimeout(() => {
                     try {
@@ -71,11 +70,11 @@ describe('DataManager', () => {
 
         describe('existing recipe', () => {
             beforeEach(() => {
-                dataManager.setSelectedRecipes([testRecipe]);
+                dataManager.setSelectedRecipeIds([testRecipeId]);
             });
             
             test('removes an existing recipe without the isSelected flag', done => {
-                selectedRecipesSubsciption = skipReplay(dataManager.selectedRecipes$).subscribe(recipes => {
+                selectedRecipeIdsSubscription = skipReplay(dataManager.selectedRecipeIds$).subscribe(recipes => {
                     try {
                         expect(recipes).toEqual([]);
                         done();
@@ -84,10 +83,10 @@ describe('DataManager', () => {
                     }
                 });
 
-                dataManager.updateRecipeSelection(testRecipe);
+                dataManager.updateRecipeSelection(testRecipeId);
             });
             test('removes an existing recipe with the isSelected flag', done => {
-                selectedRecipesSubsciption = skipReplay(dataManager.selectedRecipes$).subscribe(recipes => {
+                selectedRecipeIdsSubscription = skipReplay(dataManager.selectedRecipeIds$).subscribe(recipes => {
                     try {
                         expect(recipes).toEqual([]);
                         done();
@@ -96,13 +95,13 @@ describe('DataManager', () => {
                     }
                 });
 
-                dataManager.updateRecipeSelection(testRecipe, false);
+                dataManager.updateRecipeSelection(testRecipeId, false);
             });
             test('does nothing with an existing recipe and isSelected set to true', done => {
                 let wasCalled = false;
-                selectedRecipesSubsciption = skipReplay(dataManager.selectedRecipes$).subscribe(() => wasCalled = true);
+                selectedRecipeIdsSubscription = skipReplay(dataManager.selectedRecipeIds$).subscribe(() => wasCalled = true);
 
-                dataManager.updateRecipeSelection(testRecipe, true);
+                dataManager.updateRecipeSelection(testRecipeId, true);
 
                 setTimeout(() => {
                     try {
@@ -116,74 +115,74 @@ describe('DataManager', () => {
         });
     });
 
-    describe('Included DLCs', () => {
+    describe('Included DLCIds', () => {
         afterAll(() => {
-            dataManager.setIncludedDLCs([]);
+            dataManager.setIncludedDLCIds([]);
         });
 
-        let includedDLCsSubscription: Subscription;
+        let includedDLCIdsSubscription: Subscription;
 
         afterEach(() => {
-            if (includedDLCsSubscription) {
-                includedDLCsSubscription.unsubscribe();
+            if (includedDLCIdsSubscription) {
+                includedDLCIdsSubscription.unsubscribe();
             }
         });
 
-        const DLC1: IDLCInstance = DLC_MAPPINGS[0];
-        const DLC2: IDLCInstance = DLC_MAPPINGS[1];
+        const DLC1Id: number = 0;
+        const DLC2Id: number = 1;
 
-        test('adds DLC with no existing included DLCs', done => {
-            dataManager.setIncludedDLCs([]);
+        test('adds DLCId with no existing included DLCIds', done => {
+            dataManager.setIncludedDLCIds([]);
 
-            includedDLCsSubscription = skipReplay(dataManager.includedDLCs$).subscribe(DLCs => {
+            includedDLCIdsSubscription = skipReplay(dataManager.includedDLCIds$).subscribe(DLCIds => {
                 try {
-                    expect(DLCs.length).toEqual(1);
-                    expect(DLCs).toEqual([DLC1]);
+                    expect(DLCIds.length).toEqual(1);
+                    expect(DLCIds).toEqual([DLC1Id]);
                     done();
                 } catch (error) {
                     done(error);
                 }
             });
 
-            dataManager.updateDLCInclusion(DLC1, true);
+            dataManager.updateDLCInclusion(DLC1Id, true);
         });
 
-        test('adds DLC to existing included DLCs', done => {
-            dataManager.setIncludedDLCs([DLC1]);
+        test('adds DLCId to existing included DLCIds', done => {
+            dataManager.setIncludedDLCIds([DLC1Id]);
 
-            includedDLCsSubscription = skipReplay(dataManager.includedDLCs$).subscribe(DLCs => {
+            includedDLCIdsSubscription = skipReplay(dataManager.includedDLCIds$).subscribe(DLCs => {
                 try {
                     expect(DLCs.length).toEqual(2);
-                    expect(DLCs).toEqual(expect.arrayContaining([DLC1, DLC2]));
+                    expect(DLCs).toEqual(expect.arrayContaining([DLC1Id, DLC2Id]));
                     done();
                 } catch (error) {
                     done(error);
                 }
             });
 
-            dataManager.updateDLCInclusion(DLC2, true);
+            dataManager.updateDLCInclusion(DLC2Id, true);
         });
 
-        test('leaves other DLCs after removing one of many', done => {
-            dataManager.setIncludedDLCs([DLC1, DLC2]);
+        test('leaves other DLCIds after removing one of many', done => {
+            dataManager.setIncludedDLCIds([DLC1Id, DLC2Id]);
 
-            includedDLCsSubscription = skipReplay(dataManager.includedDLCs$).subscribe(DLCs => {
+            includedDLCIdsSubscription = skipReplay(dataManager.includedDLCIds$).subscribe(DLCs => {
                 try {
                     expect(DLCs.length).toEqual(1);
-                    expect(DLCs).toEqual([DLC2]);
+                    expect(DLCs).toEqual([DLC2Id]);
                     done();
                 } catch (error) {
                     done(error);
                 }
             });
 
-            dataManager.updateDLCInclusion(DLC1, false);
+            dataManager.updateDLCInclusion(DLC1Id, false);
         });
 
-        test('leaves empty array if removing only DLC', done => {
-            dataManager.setIncludedDLCs([DLC1]);
+        test('leaves empty array if removing only DLCId', done => {
+            dataManager.setIncludedDLCIds([DLC1Id]);
 
-            includedDLCsSubscription = skipReplay(dataManager.includedDLCs$).subscribe(DLCs => {
+            includedDLCIdsSubscription = skipReplay(dataManager.includedDLCIds$).subscribe(DLCs => {
                 try {
                     expect(DLCs).toEqual([]);
                     done();
@@ -192,16 +191,16 @@ describe('DataManager', () => {
                 }
             });
 
-            dataManager.updateDLCInclusion(DLC1, false);
+            dataManager.updateDLCInclusion(DLC1Id, false);
         });
 
-        test('does nothing with a non-existing DLC and isSelected set to false', done => {
+        test('does nothing with a non-existing DLCId and isSelected set to false', done => {
             let wasCalled = false;
-            dataManager.setIncludedDLCs([]);
+            dataManager.setIncludedDLCIds([]);
 
-            includedDLCsSubscription = skipReplay(dataManager.includedDLCs$).subscribe(() => wasCalled = true);
+            includedDLCIdsSubscription = skipReplay(dataManager.includedDLCIds$).subscribe(() => wasCalled = true);
 
-            dataManager.updateDLCInclusion(DLC1, false);
+            dataManager.updateDLCInclusion(DLC1Id, false);
 
             setTimeout(() => {
                 try {
@@ -213,13 +212,13 @@ describe('DataManager', () => {
             }, (100));
         });
 
-        test('does nothing with an existing DLC and isSelected set to true', done => {
+        test('does nothing with an existing DLCId and isSelected set to true', done => {
             let wasCalled = false;
-            dataManager.setIncludedDLCs([DLC1]);
+            dataManager.setIncludedDLCIds([DLC1Id]);
 
-            includedDLCsSubscription = skipReplay(dataManager.includedDLCs$).subscribe(() => wasCalled = true);
+            includedDLCIdsSubscription = skipReplay(dataManager.includedDLCIds$).subscribe(() => wasCalled = true);
 
-            dataManager.updateDLCInclusion(DLC1, true);
+            dataManager.updateDLCInclusion(DLC1Id, true);
 
             setTimeout(() => {
                 try {

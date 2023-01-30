@@ -15,7 +15,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { RecipesTab } from './pages/RecipesTab';
 import { WatchListTab } from './pages/WatchListTab';
 import { storage } from './services/Storage';
-import { BEST_RECIPES, DLC_MAPPINGS, STORAGE_KEY_INCLUDED_DLCS, STORAGE_KEY_SELECTED_RECIPES } from './utils/constants';
+import { ALL_DLC_INSTANCES, STORAGE_KEY_INCLUDED_DLCS, STORAGE_KEY_SELECTED_RECIPES } from './utils/constants';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -92,22 +92,20 @@ async function initializeValuesFromStorage() {
   const DLCIds: number[] = await storage.get(STORAGE_KEY_INCLUDED_DLCS);
   const recipeIds: number[] = await storage.get(STORAGE_KEY_SELECTED_RECIPES);
   if (DLCIds) {
-    const DLCs = DLC_MAPPINGS.filter(dlcM => DLCIds.includes(dlcM.id));
-    dataManager.setIncludedDLCs(DLCs);
+    dataManager.setIncludedDLCIds(DLCIds);
   } else {
-    dataManager.setIncludedDLCs(DLC_MAPPINGS);
+    dataManager.setIncludedDLCIds(ALL_DLC_INSTANCES.map(dLC => dLC.id));
   }
   if (recipeIds) {
-    const recipes = BEST_RECIPES.filter(r => recipeIds.includes(r.id));
-    dataManager.setSelectedRecipes(recipes);
+    dataManager.setSelectedRecipeIds(recipeIds);
   }
 }
 
 function initializeStorageUpdateHandlers() {
-  dataManager.includedDLCs$.pipe(skip(1), distinctUntilChanged()).subscribe(DLCs => {
-    storage.set(STORAGE_KEY_INCLUDED_DLCS, DLCs.map(dlc => dlc.id));
+  dataManager.includedDLCIds$.pipe(skip(1), distinctUntilChanged()).subscribe(dLCIds => {
+    storage.set(STORAGE_KEY_INCLUDED_DLCS, dLCIds);
   });
-  dataManager.selectedRecipes$.pipe(skip(1), distinctUntilChanged()).subscribe(recipes => {
-    storage.set(STORAGE_KEY_SELECTED_RECIPES, recipes.map(r => r.id));
+  dataManager.selectedRecipeIds$.pipe(skip(1), distinctUntilChanged()).subscribe(recipeIds => {
+    storage.set(STORAGE_KEY_SELECTED_RECIPES, recipeIds);
   });
 }

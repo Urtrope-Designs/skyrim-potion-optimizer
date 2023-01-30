@@ -1,21 +1,32 @@
 import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonModal, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { settings } from 'ionicons/icons';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { combineLatest, take } from 'rxjs';
 import { RecipeSummaryEntry } from '../components/RecipeSummaryEntry';
 import { UserSettings } from '../components/UserSettings';
 import { dataManager } from '../services/DataManager';
-import { IRecipe } from '../types/Recipe';
-import { BEST_RECIPES } from '../utils/constants';
+import { recipeService } from '../services/RecipeService';
+import { IRecipeSummaryViewmodel } from '../types/RecipeSummaryViewmodel';
+import { ALL_INGREDIENTS, ALL_RECIPES } from '../utils/constants';
 import './RecipesTab.css';
 
 export const RecipesTab: React.FC = () => {
   const settingsModal = useRef<HTMLIonModalElement>(null);
-  const [selectedRecipes, setSelectedRecipes] = useState<IRecipe[]>([]);
+  const [recipeSummaries, setRecipeSummaries] = useState<IRecipeSummaryViewmodel[]>([]);
   
-  useEffect(() => {dataManager.selectedRecipes$.subscribe(setSelectedRecipes)}, []);
+  useEffect(() => {
+    combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$]).subscribe(([selectedRecipeIds, includedDLCIds]) => {
+      const availableRecipes = recipeService.getAvailableRecipes(ALL_RECIPES, ALL_INGREDIENTS, includedDLCIds);
+      const recipeViewmodels = recipeService.getRecipeSummaryViewmodels(availableRecipes, ALL_INGREDIENTS, selectedRecipeIds);
+      setRecipeSummaries(recipeViewmodels);
+    })
+  }, []);
 
   const toggleAllRecipes = () => {
-    selectedRecipes.length === BEST_RECIPES.length ? dataManager.setSelectedRecipes([]) : dataManager.setSelectedRecipes(BEST_RECIPES);
+    dataManager.includedDLCIds$.pipe(take(1)).subscribe((includedDLCIds) => {
+      const availableRecipes = recipeService.getAvailableRecipes(ALL_RECIPES, ALL_INGREDIENTS, includedDLCIds);
+      recipeSummaries.length === availableRecipes.length ? dataManager.setSelectedRecipeIds([]) : dataManager.setSelectedRecipeIds(availableRecipes.map(r => r.id));
+    });
   }
   
   return (
@@ -32,15 +43,15 @@ export const RecipesTab: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <IonItem>
-          <IonCheckbox slot="start" checked={selectedRecipes.length === BEST_RECIPES.length} onClick={() => toggleAllRecipes()}></IonCheckbox>
+          <IonCheckbox slot="start" checked={recipeSummaries.length === ALL_RECIPES.length} onClick={() => toggleAllRecipes()}></IonCheckbox>
           <IonLabel>
             <h2>Toggle All</h2>
           </IonLabel>
         </IonItem>
         <IonList>
           {
-              getRecipesWithSelection(selectedRecipes).map(recipe => {
-                  return <RecipeSummaryEntry key={recipe.id} recipe={recipe} updateRecipeSelection={dataManager.updateRecipeSelection}></RecipeSummaryEntry>
+              recipeSummaries.map(recipe => {
+                  return <RecipeSummaryEntry key={recipe.recipeId} recipeSummary={recipe} updateRecipeSelection={dataManager.updateRecipeSelection}></RecipeSummaryEntry>
               })
           }
         </IonList> 
@@ -51,14 +62,3 @@ export const RecipesTab: React.FC = () => {
     </IonPage>
   );
 };
-
-function getRecipesWithSelection(selectedRecipes: IRecipe[]): (IRecipe & {isSelected: boolean})[] {
-  return BEST_RECIPES.map(recipe => {
-    return {
-      ...recipe,
-      isSelected: selectedRecipes.some(sR => sR.ingredients.join() === recipe.ingredients.join()),
-    }
-  })
-}
-
-
