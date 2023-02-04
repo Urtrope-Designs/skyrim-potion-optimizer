@@ -1,0 +1,19 @@
+.ingredientSummaryEntry ion-button {
+    position: absolute;
+    width: 2.1em;
+    --padding-start: 0px;
+    --padding-end: 0px;
+}
+
+html[mode="ios"] .ingredientSummaryEntry ion-button {
+    top: 1.25em;
+    right: calc(.6em + var(--ion-safe-area-right, 0px));
+}
+html[mode="md"] .ingredientSummaryEntry ion-button {
+    top: .25rem;
+    right: calc(.25em + var(--ion-safe-area-right, 0px));
+}
+
+.ingredientSummaryEntry ion-card-content {
+    min-height: 5em;
+}

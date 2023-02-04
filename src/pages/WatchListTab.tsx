@@ -1,8 +1,9 @@
-import { ActionSheetButton, IonButton, IonButtons, IonCard, IonCardHeader, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonModal, IonPage, IonRouterLink, IonRow, IonTitle, IonToolbar, useIonActionSheet } from '@ionic/react';
-import { settings, trash } from 'ionicons/icons';
+import { ActionSheetButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonModal, IonPage, IonRouterLink, IonRow, IonTitle, IonToolbar, useIonActionSheet } from '@ionic/react';
+import { settings } from 'ionicons/icons';
 import { useEffect, useRef, useState } from 'react';
 import { combineLatest } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { IngredientSummaryEntry } from '../components/IngredientSummaryEntry';
 import { UserSettings } from '../components/UserSettings';
 import { dataManager } from '../services/DataManager';
 import { ingredientsService } from '../services/IngredientsService';
@@ -28,6 +29,14 @@ export const WatchListTab: React.FC = () => {
       setIngredients(ingredientVMs);
     });
   }, []);
+
+  const confirmRemoveIngredient = (ingredient: IIngredientViewmodel) => {
+    present({
+      header: 'Are you sure?',
+      subHeader: `This will de-select all recipes that include "${ingredient.ingredientName}"`,
+      buttons: buildRemoveConfirmationButtons(ingredient.ingredientId),
+    });
+  }
   
   return (
     <IonPage>
@@ -48,26 +57,8 @@ export const WatchListTab: React.FC = () => {
                 <IonRow>
                 {
                   ingredients.map(ingredient => (
-                    <IonCol size='12' size-sm='6' size-lg='3' key={ingredient.ingredientId}>
-                      <IonCard>
-                        <IonCardHeader class='display-flex ion-justify-content-between'>
-                          <IonTitle>
-                            { ingredient.ingredientName }
-                          </IonTitle>
-                          <IonButton
-                            fill='clear' shape='round' color='danger'
-                            onClick={() => 
-                              present({
-                                header: 'Are you sure?',
-                                subHeader: 'This will de-select all recipes that include this ingredient',
-                                buttons: buildRemoveConfirmationButtons(ingredient.ingredientId)
-                              })
-                            }
-                          >
-                            <IonIcon slot="icon-only" icon={trash}></IonIcon>
-                          </IonButton>
-                        </IonCardHeader>
-                      </IonCard>
+                    <IonCol size='6' size-sm='4' size-lg='3' key={ingredient.ingredientId}>
+                      <IngredientSummaryEntry ingredientSummary={ingredient} removeIngredient={confirmRemoveIngredient}></IngredientSummaryEntry>
                     </IonCol>
                   ))
                 }

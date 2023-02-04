@@ -27,21 +27,25 @@ export const ALL_RECIPES: IRecipe[] = [
         id: 0,
         ingredientIds: [41, 73, 84],
         standardEffects: ['Regenerate Health', 'Regenerate Magicka', 'Waterbreathing'],
+        //1761
     },
     {
         id: 1,
         ingredientIds: [23, 71, 84],
         standardEffects: ['Damage Magicka Regen', 'Lingering Damage Stamina', 'Waterbreathing'],
+        //1691
     },
     {
         id: 2,
         ingredientIds: [54, 61, 84],
         standardEffects: ['Fortify Magicka', 'Regenerate Magicka', 'Restore Stamina', 'Waterbreathing'],
+        //1689
     },
     {
         id: 5,
         ingredientIds: [5, 43, 50],
         standardEffects: ['Damage Magicka Regen', 'Fortify Health', 'Fortify One-handed'],
+        //795
     },
     {
         id: 6,
@@ -89,6 +93,14 @@ export const ALL_RECIPES: IRecipe[] = [
         standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Slow'],
     },
 ];
+// SR, fungus stalk, garlic (2091: waterbreathing, fortify stamina, magicka regen)
+// try salmon roe, histcarp, salt pile (1689); also combinations of 
+// chicken's egg, SR, garlic (1597)
+// chix egg, sr, salt pile (1597)
+// chix egg, sr, nordic barnacle (1597: waterbreathing, magicka regen)
+// chix egg, sr, nordic barnacle (1432)
+
+//sr, salt, garlic (164)
 
 export const ALL_INGREDIENTS: IIngredient[] = [
     {
@@ -173,7 +185,7 @@ export const ALL_INGREDIENTS: IIngredient[] = [
     },
     {
         id: 81,
-        name: 'River Better',
+        name: 'River Betty',
         dLCId: null,
     },
     {

@@ -1,7 +1,7 @@
-import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonModal, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonList, IonModal, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { settings } from 'ionicons/icons';
 import { useEffect, useRef, useState } from 'react';
-import { combineLatest, take } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { RecipeSummaryEntry } from '../components/RecipeSummaryEntry';
 import { UserSettings } from '../components/UserSettings';
 import { dataManager } from '../services/DataManager';
@@ -13,6 +13,7 @@ import './RecipesTab.css';
 export const RecipesTab: React.FC = () => {
   const settingsModal = useRef<HTMLIonModalElement>(null);
   const [recipeSummaries, setRecipeSummaries] = useState<IRecipeSummaryViewmodel[]>([]);
+  const [showOnlySelected, setShowOnlySelected] = useState<boolean>(false);
   
   useEffect(() => {
     combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$]).subscribe(([selectedRecipeIds, includedDLCIds]) => {
@@ -23,10 +24,11 @@ export const RecipesTab: React.FC = () => {
   }, []);
 
   const toggleAllRecipes = () => {
-    dataManager.includedDLCIds$.pipe(take(1)).subscribe((includedDLCIds) => {
-      const availableRecipes = recipeService.getAvailableRecipes(ALL_RECIPES, ALL_INGREDIENTS, includedDLCIds);
-      recipeSummaries.length === availableRecipes.length ? dataManager.setSelectedRecipeIds([]) : dataManager.setSelectedRecipeIds(availableRecipes.map(r => r.id));
-    });
+      if (recipeSummaries.every(rS => rS.isSelected)) {
+        dataManager.setSelectedRecipeIds([]);
+      } else {
+        dataManager.setSelectedRecipeIds(recipeSummaries.map(rS => rS.recipeId));
+      }
   }
   
   return (
@@ -42,17 +44,33 @@ export const RecipesTab: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonItem>
-          <IonCheckbox slot="start" checked={recipeSummaries.length === ALL_RECIPES.length} onClick={() => toggleAllRecipes()}></IonCheckbox>
-          <IonLabel>
-            <h2>Toggle All</h2>
-          </IonLabel>
-        </IonItem>
         <IonList>
+          <IonItem>
+            <IonButtons slot="start">
+              <IonButton
+                color="primary"
+                fill={recipeSummaries.every(rS => rS.isSelected) ? 'outline' : 'solid'}
+                onClick={() => toggleAllRecipes()}
+              >
+                {recipeSummaries.every(rS => rS.isSelected) ? 'Deselect All' : 'Select All'}
+              </IonButton>
+              <IonButton
+                color="primary"
+                fill={showOnlySelected ? 'outline' : 'solid'}
+                onClick={() => setShowOnlySelected(!showOnlySelected)}
+              >
+                {showOnlySelected ? 'Show All' : 'Hide Deselected'}
+              </IonButton>
+            </IonButtons>
+          </IonItem>
           {
-              recipeSummaries.map(recipe => {
-                  return <RecipeSummaryEntry key={recipe.recipeId} recipeSummary={recipe} updateRecipeSelection={dataManager.updateRecipeSelection}></RecipeSummaryEntry>
-              })
+            recipeSummaries
+            .filter(recipe => {
+              return !showOnlySelected || recipe.isSelected;
+            })
+            .map(recipe => {
+              return <RecipeSummaryEntry key={recipe.recipeId} recipeSummary={recipe} updateRecipeSelection={dataManager.updateRecipeSelection}></RecipeSummaryEntry>
+            })
           }
         </IonList> 
         <IonModal ref={settingsModal} trigger='settings-toggle'>
