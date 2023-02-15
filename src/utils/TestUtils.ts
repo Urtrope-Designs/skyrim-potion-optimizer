@@ -21,24 +21,28 @@ export const TEST_RECIPES: IRecipe[] = [
 ];
 export const TEST_INGREDIENTS: IIngredient[] = [
     {
+        dLCId: null,
         id: 0,
+        merchantAvailabilityId: 1,
         name: 'ing1',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 1,
+        merchantAvailabilityId: 0,
         name: 'ing2',
-        dLCId: null,
     },
     {
-        id: 2,
-        name: 'ing3',
         dLCId: 0,
+        id: 2,
+        merchantAvailabilityId: 3,
+        name: 'ing3',
     },
     {
-        id: 3,
-        name: 'ing4',
         dLCId: 1,
+        id: 3,
+        merchantAvailabilityId: 4,
+        name: 'ing4',
     },
 ];
 export const TEST_DLCS: IDLCInstance[] = [

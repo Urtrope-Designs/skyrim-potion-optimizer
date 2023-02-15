@@ -55,7 +55,7 @@ export const RecipesTab: React.FC = () => {
                 {recipeSummaries.every(rS => rS.isSelected) ? 'Deselect All' : 'Select All'}
               </IonButton>
               <IonButton
-                color="primary"
+                color="secondary"
                 fill={showOnlySelected ? 'outline' : 'solid'}
                 onClick={() => setShowOnlySelected(!showOnlySelected)}
               >

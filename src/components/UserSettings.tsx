@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonTitle, IonToolbar } from "@ionic/react";
+import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonListHeader, IonTitle, IonToolbar } from "@ionic/react";
 import { close } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { dataManager } from "../services/DataManager";
@@ -37,18 +37,32 @@ export const UserSettings: React.FC<UserSettingsProps> = ({dismiss}) => {
             <IonContent>
                 <IonList>
                     <IonListHeader>
-                        <IonLabel>DLCs</IonLabel>
+                        <IonLabel>Ingredient Availability</IonLabel>
                     </IonListHeader>
-                    { 
-                        dLCs.map(dLC => {
-                            return (
-                                <IonItem key={dLC.dLCId}>
-                                    <IonCheckbox slot='start' checked={dLC.isSelected} onIonChange={(event) => dataManager.updateDLCInclusion(dLC.dLCId, event.detail.checked)}></IonCheckbox>
-                                    <IonLabel>{dLC.dLCName}</IonLabel>
-                                </IonItem>
-                            )
-                        })
-                    }
+                    <IonItemGroup>
+                        <IonItemDivider>
+                            <IonLabel>DLCs</IonLabel>
+                        </IonItemDivider>
+                        { 
+                            dLCs.map(dLC => {
+                                return (
+                                    <IonItem key={dLC.dLCId}>
+                                        <IonCheckbox slot='start' checked={dLC.isSelected} onIonChange={(event) => dataManager.updateDLCInclusion(dLC.dLCId, event.detail.checked)}></IonCheckbox>
+                                        <IonLabel>{dLC.dLCName}</IonLabel>
+                                    </IonItem>
+                                )
+                            })
+                        }
+                    </IonItemGroup>
+                    <IonItemGroup>
+                        <IonItemDivider>
+                            <IonLabel>Other Settings</IonLabel>
+                        </IonItemDivider>
+                        <IonItem>
+                            <IonCheckbox slot='start' checked={true}></IonCheckbox>
+                            <IonLabel class="ion-text-wrap">Include ingredients that can't be bought from merchants</IonLabel>
+                        </IonItem>
+                    </IonItemGroup>
                 </IonList>
             </IonContent>
         </>

@@ -1,5 +1,6 @@
 export interface IIngredient {
-    id: number;
-    name: string;
     dLCId: number | null;
+    id: number;
+    merchantAvailabilityId: number;
+    name: string;
 }

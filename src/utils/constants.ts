@@ -1,9 +1,16 @@
+import { IAvailabilityOptionsSelection } from "../types/AvailabilityOptionsSelection";
 import { IDLCInstance } from "../types/DLCInstance";
 import { IIngredient } from "../types/Ingredient";
+import { IMerchantAvailabilityLevel } from "../types/MerchantAvailabilityLevel";
 import { IRecipe } from "../types/Recipe";
 
 export const STORAGE_KEY_INCLUDED_DLCS = 'SPO_SK_INCLUDED_DLCS';
 export const STORAGE_KEY_SELECTED_RECIPES = 'SPO_SK_SELECTED_RECIPES';
+
+export const DEFAULT_AVAILABILITY_OPTIONS_SELECTION: IAvailabilityOptionsSelection = {
+    noMerchants: true,
+};
+
 export const ALL_DLC_INSTANCES: IDLCInstance[] = [
     {
         id: 0,
@@ -104,103 +111,154 @@ export const ALL_RECIPES: IRecipe[] = [
 
 export const ALL_INGREDIENTS: IIngredient[] = [
     {
+        dLCId: null,
         id: 5,
+        merchantAvailabilityId: 5,
         name: 'Bear Claws',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 11,
+        merchantAvailabilityId: 2,
         name: 'Blue Butterfly Wing',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 13,
+        merchantAvailabilityId: 3,
         name: 'Blue Mountain Flower',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 23,
+        merchantAvailabilityId: 2,
         name: 'Chicken\'s Egg',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 24,
+        merchantAvailabilityId: 2,
         name: 'Creep Cluster',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 28,
+        merchantAvailabilityId: 1,
         name: 'Deathbell',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 41,
+        merchantAvailabilityId: 3,
         name: 'Garlic',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 43,
+        merchantAvailabilityId: 1,
         name: 'Giant\'s Toe',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 45,
+        merchantAvailabilityId: 2,
         name: 'Glow Dust',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 46,
+        merchantAvailabilityId: 0,
         name: 'Glowing Mushroom',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 50,
+        merchantAvailabilityId: 2,
         name: 'Hanging Moss',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 54,
+        merchantAvailabilityId: 3,
         name: 'Histcarp',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 61,
+        merchantAvailabilityId: 1,
         name: 'Jazbay Grapes',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 63,
+        merchantAvailabilityId: 5,
         name: 'Large Antlers',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 71,
+        merchantAvailabilityId: 0,
         name: 'Nightshade',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 73,
+        merchantAvailabilityId: 2,
         name: 'Nordic Barnacle',
-        dLCId: null,
     },
     {
+        dLCId: null,
         id: 81,
+        merchantAvailabilityId: 3,
         name: 'River Betty',
-        dLCId: null,
     },
     {
-        id: 84,
-        name: 'Salmon Roe',
         dLCId: 2,
+        id: 84,
+        merchantAvailabilityId: 0,
+        name: 'Salmon Roe',
     },
     {
+        dLCId: null,
         id: 86,
+        merchantAvailabilityId: 2,
         name: 'Scaly Pholiota',
-        dLCId: null,
     },
     {
-        id: 109,
-        name: 'Wisp Wrappings',
         dLCId: null,
+        id: 109,
+        merchantAvailabilityId: 5,
+        name: 'Wisp Wrappings',
     },
 ]
+
+const ALL_MERCHANT_AVAILABILITY_LEVELS: IMerchantAvailabilityLevel[] = [
+    {
+        id: 0,
+        name: 'None',
+    },
+    {
+        id: 1,
+        name: 'Rare',
+    },
+    {
+        id: 2,
+        name: 'Uncommon',
+    },
+    {
+        id: 3,
+        name: 'Common',
+    },
+    {
+        id: 4,
+        name: 'Rare with Merchant perk',
+    },
+    {
+        id: 5,
+        name: 'Uncommon with Merchant perk',
+    },
+    {
+        id: 6,
+        name: 'Common with Merchant perk',
+    },
+];
