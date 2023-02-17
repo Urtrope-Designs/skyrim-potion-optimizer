@@ -1,3 +1,4 @@
+import { IAvailabilityOptionsSelection } from "../types/AvailabilityOptionsSelection";
 import { IIngredient } from "../types/Ingredient";
 import { IRecipe } from "../types/Recipe";
 import { IRecipeSummaryViewmodel } from "../types/RecipeSummaryViewmodel";
@@ -16,7 +17,7 @@ export const recipeService = {
             return allIngredientIds;
           }, [] as number[]);
     },
-    getAvailableRecipes: (allRecipes: IRecipe[], allIngredients: IIngredient[], includedDLCIds: number[]): IRecipe[] => {
+    getAvailableRecipes: (allRecipes: IRecipe[], allIngredients: IIngredient[], includedDLCIds: number[], ingredientAvailabilityOptions: IAvailabilityOptionsSelection): IRecipe[] => {
         const availableRecipes: IRecipe[] = allRecipes.reduce((allRecs: IRecipe[], curRec: IRecipe) => {
             const newRecHolder: IRecipe[] = isRecipeAvailable(curRec) ? [curRec] : [];
             return [...allRecs, ...newRecHolder];
@@ -25,8 +26,15 @@ export const recipeService = {
         return availableRecipes;
 
         function isRecipeAvailable(curRecipe: IRecipe): boolean {
-            const recipeIngredients: IIngredient[] = ingredientsService.getIngredientsById(curRecipe.ingredientIds, allIngredients);
-            return recipeIngredients.every(ingredient => ingredient.dLCId === null || includedDLCIds.includes(ingredient.dLCId));
+            const recipeIngredients = ingredientsService.getIngredientsById(curRecipe.ingredientIds, allIngredients);
+            const areAllDLCsSelected = recipeIngredients.every(ingredient => ingredient.dLCId === null || includedDLCIds.includes(ingredient.dLCId));
+            const areAllAvailabilityOptionsSatisfied: boolean = testAvailabilityOptions(curRecipe);
+            return areAllDLCsSelected && areAllAvailabilityOptionsSatisfied;
+        }
+
+        function testAvailabilityOptions(curRecipe: IRecipe): boolean {
+            const recipeIngredients = ingredientsService.getIngredientsById(curRecipe.ingredientIds, allIngredients);
+            return ingredientAvailabilityOptions.noMerchants || recipeIngredients.every(ingredient => ingredient.merchantAvailabilityId > 0 && ingredient.merchantAvailabilityId <= 3);
         }
     },
     getRecipesById: (requestedRecipeIds: number[], allRecipes: IRecipe[]): IRecipe[] => {

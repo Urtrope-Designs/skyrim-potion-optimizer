@@ -27,14 +27,21 @@ describe('RecipeService', () => {
     describe('#getAvailableRecipes', () => {
         test('returns valid recipes with no DLCs selected', () => {
             const expectedRecipes = [TEST_RECIPES[0]];
-            const result = recipeService.getAvailableRecipes(TEST_RECIPES, TEST_INGREDIENTS, []);
+            const result = recipeService.getAvailableRecipes(TEST_RECIPES, TEST_INGREDIENTS, [], {noMerchants: true});
 
             expect(result).toEqual(expectedRecipes);
         });
 
         test('returns valid recipes with one DLC selected', () => {
             const expectedRecipes = TEST_RECIPES.slice(0,2);
-            const result = recipeService.getAvailableRecipes(TEST_RECIPES, TEST_INGREDIENTS, [0]);
+            const result = recipeService.getAvailableRecipes(TEST_RECIPES, TEST_INGREDIENTS, [0], {noMerchants: true});
+
+            expect(result).toEqual(expectedRecipes);
+        });
+
+        test('returns valid recipes with non-merchant ingredients excluded', () => {
+            const expectedRecipes = [TEST_RECIPES[1]];
+            const result = recipeService.getAvailableRecipes(TEST_RECIPES, TEST_INGREDIENTS, [0,1], {noMerchants: false});
 
             expect(result).toEqual(expectedRecipes);
         });

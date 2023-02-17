@@ -18,9 +18,9 @@ export const WatchListTab: React.FC = () => {
   const [ingredients, setIngredients] = useState<IIngredientViewmodel[]>([]);
 
   useEffect(() => {
-    combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$]).subscribe(([selectedRecipeIds, includedDLCIds]) => {
+    combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$]).subscribe(([selectedRecipeIds, includedDLCIds, ingredientAvailabilityOptions]) => {
       const selectedRecipes = recipeService.getRecipesById(selectedRecipeIds, ALL_RECIPES);
-      const availableRecipes = recipeService.getAvailableRecipes(selectedRecipes, ALL_INGREDIENTS, includedDLCIds);
+      const availableRecipes = recipeService.getAvailableRecipes(selectedRecipes, ALL_INGREDIENTS, includedDLCIds, ingredientAvailabilityOptions);
       const availableIngredientIds = recipeService.getAllIngredientIdsFromRecipes(availableRecipes);
       const availableIngredients = ingredientsService.getIngredientsById(availableIngredientIds, ALL_INGREDIENTS);
       const ingredientVMs = ingredientsService.getIngredientViewmodels(availableIngredients);

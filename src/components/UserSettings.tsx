@@ -3,8 +3,9 @@ import { close } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { dataManager } from "../services/DataManager";
 import { dLCService } from "../services/DLCService";
+import { IAvailabilityOptionsSelection } from "../types/AvailabilityOptionsSelection";
 import { IDLCViewmodel } from "../types/DLCViewmodel";
-import { ALL_DLC_INSTANCES } from "../utils/constants";
+import { ALL_DLC_INSTANCES, DEFAULT_AVAILABILITY_OPTIONS_SELECTION } from "../utils/constants";
 
 interface UserSettingsProps {
     dismiss?: () => void;
@@ -12,12 +13,16 @@ interface UserSettingsProps {
 
 export const UserSettings: React.FC<UserSettingsProps> = ({dismiss}) => {
     const [dLCs, updateDLCs] = useState<IDLCViewmodel[]>([]);
+    const [availabilityOptionsSelection, updateAvailabilityOptionsSelection] = useState<IAvailabilityOptionsSelection>(DEFAULT_AVAILABILITY_OPTIONS_SELECTION);
 
     useEffect(() => {
         dataManager.includedDLCIds$.subscribe(includedDLCIds => {
             const dLCVMs = dLCService.getDLCViewmodels(ALL_DLC_INSTANCES, includedDLCIds);
             updateDLCs(dLCVMs)
-        })
+        });
+        dataManager.ingredientAvailabilityOptions$.subscribe(availabilityOptionsSelection => {
+            updateAvailabilityOptionsSelection(availabilityOptionsSelection);
+        });
     }, []);
 
     return (
@@ -59,7 +64,7 @@ export const UserSettings: React.FC<UserSettingsProps> = ({dismiss}) => {
                             <IonLabel>Other Settings</IonLabel>
                         </IonItemDivider>
                         <IonItem>
-                            <IonCheckbox slot='start' checked={true}></IonCheckbox>
+                            <IonCheckbox slot='start' checked={availabilityOptionsSelection.noMerchants} onIonChange={(event) => dataManager.updateIngredientAvailabilityOptions('noMerchants', event.detail.checked)}></IonCheckbox>
                             <IonLabel class="ion-text-wrap">Include ingredients that can't be bought from merchants</IonLabel>
                         </IonItem>
                     </IonItemGroup>

@@ -16,8 +16,8 @@ export const RecipesTab: React.FC = () => {
   const [showOnlySelected, setShowOnlySelected] = useState<boolean>(false);
   
   useEffect(() => {
-    combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$]).subscribe(([selectedRecipeIds, includedDLCIds]) => {
-      const availableRecipes = recipeService.getAvailableRecipes(ALL_RECIPES, ALL_INGREDIENTS, includedDLCIds);
+    combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$]).subscribe(([selectedRecipeIds, includedDLCIds, ingredientAvailabilityOptions]) => {
+      const availableRecipes = recipeService.getAvailableRecipes(ALL_RECIPES, ALL_INGREDIENTS, includedDLCIds, ingredientAvailabilityOptions);
       const recipeViewmodels = recipeService.getRecipeSummaryViewmodels(availableRecipes, ALL_INGREDIENTS, selectedRecipeIds);
       setRecipeSummaries(recipeViewmodels);
     })

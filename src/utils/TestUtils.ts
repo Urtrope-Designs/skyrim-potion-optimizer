@@ -23,13 +23,13 @@ export const TEST_INGREDIENTS: IIngredient[] = [
     {
         dLCId: null,
         id: 0,
-        merchantAvailabilityId: 1,
+        merchantAvailabilityId: 0,
         name: 'ing1',
     },
     {
         dLCId: null,
         id: 1,
-        merchantAvailabilityId: 0,
+        merchantAvailabilityId: 1,
         name: 'ing2',
     },
     {
