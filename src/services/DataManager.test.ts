@@ -216,7 +216,7 @@ describe('DataManager', () => {
             let wasCalled = false;
             dataManager.setIncludedDLCIds([DLC1Id]);
 
-            includedDLCIdsSubscription = skipReplay(dataManager.includedDLCIds$).subscribe(() => wasCalled = true);
+            includedDLCIdsSubscription = skipReplay(dataManager.includedDLCIds$).subscribe((ids) => {console.log('ids: ', ids); wasCalled = true});
 
             dataManager.updateDLCInclusion(DLC1Id, true);
 

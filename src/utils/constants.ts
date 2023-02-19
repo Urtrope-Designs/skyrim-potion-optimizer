@@ -6,6 +6,7 @@ import { IRecipe } from "../types/Recipe";
 
 export const STORAGE_KEY_INCLUDED_DLCS = 'SPO_SK_INCLUDED_DLCS';
 export const STORAGE_KEY_SELECTED_RECIPES = 'SPO_SK_SELECTED_RECIPES';
+export const STORAGE_KEY_AVAILABILITY_OPTIONS = 'SPO_SK_AVAILABILITY_OPTIONS';
 
 export const DEFAULT_AVAILABILITY_OPTIONS_SELECTION: IAvailabilityOptionsSelection = {
     noMerchants: true,
@@ -232,7 +233,7 @@ export const ALL_INGREDIENTS: IIngredient[] = [
     },
 ]
 
-const ALL_MERCHANT_AVAILABILITY_LEVELS: IMerchantAvailabilityLevel[] = [
+export const ALL_MERCHANT_AVAILABILITY_LEVELS: IMerchantAvailabilityLevel[] = [
     {
         id: 0,
         name: 'None',

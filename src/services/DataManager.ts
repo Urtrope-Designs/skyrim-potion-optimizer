@@ -1,10 +1,9 @@
-import { BehaviorSubject } from 'rxjs';
+import { filter, Observable, ReplaySubject, take } from 'rxjs';
 import { IAvailabilityOptionsSelection } from '../types/AvailabilityOptionsSelection';
-import { DEFAULT_AVAILABILITY_OPTIONS_SELECTION } from '../utils/constants';
 
-const _includedDLCIds$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-const _ingredientAvailabilityOptions$: BehaviorSubject<IAvailabilityOptionsSelection> = new BehaviorSubject<IAvailabilityOptionsSelection>(DEFAULT_AVAILABILITY_OPTIONS_SELECTION);
-const _selectedRecipeIds$: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+const _includedDLCIds$: ReplaySubject<number[]> = new ReplaySubject<number[]>(1);
+const _ingredientAvailabilityOptions$: ReplaySubject<IAvailabilityOptionsSelection> = new ReplaySubject<IAvailabilityOptionsSelection>(1);
+const _selectedRecipeIds$: ReplaySubject<number[]> = new ReplaySubject<number[]>(1);
 
 export const dataManager = {
     includedDLCIds$: _includedDLCIds$.asObservable(),
@@ -14,29 +13,34 @@ export const dataManager = {
     setIngredientAvailabilityOptions: (newSelection: IAvailabilityOptionsSelection) => _ingredientAvailabilityOptions$.next(newSelection),
     setSelectedRecipeIds: (newRecipeIds: number[]) => _selectedRecipeIds$.next(newRecipeIds),
     updateDLCInclusion: (dLCIdToUpdate: number, isSelected: boolean) => {
-        const curIncludedDLCIds = _includedDLCIds$.value;
-
-        if (isSelected && !curIncludedDLCIds.includes(dLCIdToUpdate)) {
-            _includedDLCIds$.next([...curIncludedDLCIds, dLCIdToUpdate]);
-        } else if (!isSelected && curIncludedDLCIds.includes(dLCIdToUpdate)) {
-            _includedDLCIds$.next(curIncludedDLCIds.filter(dLC => dLC !== dLCIdToUpdate));
-        }
+        getCurrentValueIfSet(_includedDLCIds$).subscribe(curIncludedDLCIds => {
+            if (isSelected && !curIncludedDLCIds.includes(dLCIdToUpdate)) {
+                _includedDLCIds$.next([...curIncludedDLCIds, dLCIdToUpdate]);
+            } else if (!isSelected && curIncludedDLCIds.includes(dLCIdToUpdate)) {
+                _includedDLCIds$.next(curIncludedDLCIds.filter(dLC => dLC !== dLCIdToUpdate));
+            }
+        });
     },
     updateIngredientAvailabilityOptions: (newOption: keyof IAvailabilityOptionsSelection, isSelected: boolean) => {
-        const curOptionsSelection = _ingredientAvailabilityOptions$.value;
-
-        if (curOptionsSelection[newOption] !== isSelected) {
-            _ingredientAvailabilityOptions$.next({...curOptionsSelection, [newOption]: isSelected});
-        }
+        getCurrentValueIfSet(_ingredientAvailabilityOptions$).subscribe(curOptionsSelection => {
+            if (curOptionsSelection[newOption] !== isSelected) {
+                _ingredientAvailabilityOptions$.next({...curOptionsSelection, [newOption]: isSelected});
+            }
+        });
     },
     updateRecipeSelection: (recipeIdToUpdate: number, isSelected?: boolean) => {
-        const curSelectedRecipeIds = _selectedRecipeIds$.value;
-        const isRecipeIdExisting = curSelectedRecipeIds.includes(recipeIdToUpdate);
-
-        if (isRecipeIdExisting && isSelected !== true) {
-            _selectedRecipeIds$.next(curSelectedRecipeIds.filter(eR => eR !== recipeIdToUpdate));
-        } else if (!isRecipeIdExisting && isSelected !== false) {
-            _selectedRecipeIds$.next([...curSelectedRecipeIds, recipeIdToUpdate]);
-        }
+        getCurrentValueIfSet(_selectedRecipeIds$).subscribe(curSelectedRecipeIds => {
+            const isRecipeIdExisting = curSelectedRecipeIds.includes(recipeIdToUpdate);
+            
+            if (isRecipeIdExisting && isSelected !== true) {
+                _selectedRecipeIds$.next(curSelectedRecipeIds.filter(eR => eR !== recipeIdToUpdate));
+            } else if (!isRecipeIdExisting && isSelected !== false) {
+                _selectedRecipeIds$.next([...curSelectedRecipeIds, recipeIdToUpdate]);
+            }
+        });
     }
+}
+
+function getCurrentValueIfSet<T>(obs: Observable<T>): Observable<T> {
+    return obs.pipe(take(1), filter(data => !!data));
 }
