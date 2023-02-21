@@ -1,14 +1,20 @@
 import { IonButton, IonButtons, IonCheckbox, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonItemGroup, IonLabel, IonList, IonListHeader, IonTitle, IonToolbar } from "@ionic/react";
-import { close } from "ionicons/icons";
+import { close, flask } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { dataManager } from "../services/DataManager";
 import { dLCService } from "../services/DLCService";
+import { recipeService } from "../services/RecipeService";
 import { IAvailabilityOptionsSelection } from "../types/AvailabilityOptionsSelection";
 import { IDLCViewmodel } from "../types/DLCViewmodel";
-import { ALL_DLC_INSTANCES, DEFAULT_AVAILABILITY_OPTIONS_SELECTION } from "../utils/constants";
+import { ALL_DLC_INSTANCES, ALL_RECIPES, DEFAULT_AVAILABILITY_OPTIONS_SELECTION } from "../utils/constants";
 
 interface UserSettingsProps {
     dismiss?: () => void;
+}
+
+async function resetToAllAvailableRecipes() {
+    const availableRecipes = await recipeService.filterCurrentlyAvailableRecipes(ALL_RECIPES);
+    dataManager.setSelectedRecipeIds(availableRecipes.map(recipe => recipe.id));
 }
 
 export const UserSettings: React.FC<UserSettingsProps> = ({dismiss}) => {
@@ -69,6 +75,10 @@ export const UserSettings: React.FC<UserSettingsProps> = ({dismiss}) => {
                         </IonItem>
                     </IonItemGroup>
                 </IonList>
+                <IonButton expand='block' className='ion-padding' onClick={() => {resetToAllAvailableRecipes(); dismiss?.(); }}>
+                    Start with all available
+                    <IonIcon slot='end' icon={flask}></IonIcon>
+                </IonButton>
             </IonContent>
         </>
     )

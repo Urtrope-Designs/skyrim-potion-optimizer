@@ -1,9 +1,9 @@
-import { ActionSheetButton, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonModal, IonPage, IonRouterLink, IonRow, IonTitle, IonToolbar, useIonActionSheet } from '@ionic/react';
-import { settings } from 'ionicons/icons';
+import { ActionSheetButton, IonCol, IonContent, IonList, IonModal, IonPage, IonRouterLink, useIonActionSheet } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { combineLatest } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { IngredientSummaryEntry } from '../components/IngredientSummaryEntry';
+import { StandardHeader } from '../components/StandardHeader';
 import { UserSettings } from '../components/UserSettings';
 import { dataManager } from '../services/DataManager';
 import { ingredientsService } from '../services/IngredientsService';
@@ -16,6 +16,7 @@ export const WatchListTab: React.FC = () => {
   const [present] = useIonActionSheet();
   const settingsModal = useRef<HTMLIonModalElement>(null);
   const [ingredients, setIngredients] = useState<IIngredientViewmodel[]>([]);
+  const settingsToggleId = 'watchlist-settings-toggle';
 
   useEffect(() => {
     combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$]).subscribe(([selectedRecipeIds, includedDLCIds, ingredientAvailabilityOptions]) => {
@@ -40,33 +41,28 @@ export const WatchListTab: React.FC = () => {
   
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot='primary'>
-            <IonButton id='watchlist-settings-toggle'>
-              <IonIcon slot='icon-only' icon={settings}></IonIcon>
-            </IonButton>
-          </IonButtons>
-          <IonTitle>Ingredient Watch List</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <StandardHeader title="Ingredient List" settingsToggleBtnId={settingsToggleId}></StandardHeader>
       <IonContent>
         {
           ingredients?.length 
-            ? <IonGrid>
-                <IonRow>
+            ? <IonList>
+                {/* <IonItemDivider sticky={true}>
+                  <IonButton fill='clear' slot='end'>
+                    <span className='ion-padding-end'>Sort</span>
+                    <IonIcon icon={filter}></IonIcon>
+                  </IonButton>
+                </IonItemDivider> */}
                 {
                   ingredients.map(ingredient => (
-                    <IonCol size='6' size-sm='4' size-lg='3' key={ingredient.ingredientId}>
+                    <IonCol size='12' key={ingredient.ingredientId}>
                       <IngredientSummaryEntry ingredientSummary={ingredient} removeIngredient={confirmRemoveIngredient}></IngredientSummaryEntry>
                     </IonCol>
                   ))
                 }
-              </IonRow>
-            </IonGrid>
+              </IonList>
             : <p className='ion-padding'>Head to the <IonRouterLink routerLink='/recipes' routerDirection='none'>Recipes</IonRouterLink> tab to select the ingredients to watch for.</p>
         }
-        <IonModal ref={settingsModal} trigger='watchlist-settings-toggle'>
+        <IonModal ref={settingsModal} trigger={settingsToggleId}>
           <UserSettings dismiss={() => (settingsModal.current?.dismiss())}></UserSettings>
         </IonModal>
       </IonContent>

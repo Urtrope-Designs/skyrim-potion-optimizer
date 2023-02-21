@@ -9,7 +9,7 @@ import {
   setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, triangle } from 'ionicons/icons';
+import { flask, listCircleOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { RecipesTab } from './pages/RecipesTab';
@@ -70,11 +70,11 @@ export const App: React.FC = () => {
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
               <IonTabButton tab="watchList" href="/watchlist">
-                <IonIcon icon={ellipse} />
+                <IonIcon icon={listCircleOutline} />
                 <IonLabel>Watch List</IonLabel>
               </IonTabButton>
               <IonTabButton tab="recipes" href="/recipes">
-                <IonIcon icon={triangle} />
+                <IonIcon icon={flask} />
                 <IonLabel>Recipes</IonLabel>
               </IonTabButton>
             </IonTabBar>
@@ -95,8 +95,7 @@ async function initializeValuesFromStorage() {
   const recipeIds: number[] = await storage.get(STORAGE_KEY_SELECTED_RECIPES);
 
   dataManager.setIncludedDLCIds(DLCIds || ALL_DLC_INSTANCES.map(dLC => dLC.id));
-  // TODO: how to handle when new availability options are added?
-  dataManager.setIngredientAvailabilityOptions(availabilityOptions || DEFAULT_AVAILABILITY_OPTIONS_SELECTION);
+  dataManager.setIngredientAvailabilityOptions({...DEFAULT_AVAILABILITY_OPTIONS_SELECTION, ...availabilityOptions});
   dataManager.setSelectedRecipeIds(recipeIds || []);
 }
 

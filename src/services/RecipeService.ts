@@ -1,10 +1,23 @@
+import { combineLatest, firstValueFrom, map } from "rxjs";
 import { IAvailabilityOptionsSelection } from "../types/AvailabilityOptionsSelection";
 import { IIngredient } from "../types/Ingredient";
 import { IRecipe } from "../types/Recipe";
 import { IRecipeSummaryViewmodel } from "../types/RecipeSummaryViewmodel";
+import { ALL_INGREDIENTS } from "../utils/constants";
+import { dataManager } from "./DataManager";
 import { ingredientsService } from "./IngredientsService";
 
 export const recipeService = {
+    filterCurrentlyAvailableRecipes: async (allRecipes: IRecipe[]): Promise<IRecipe[]> => {
+        const source$ = combineLatest([dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$]).pipe(
+            map(([includedDLCIds, ingredientAvailabilityOptions]) => {
+                const availableRecipes = recipeService.getAvailableRecipes(allRecipes, ALL_INGREDIENTS, includedDLCIds, ingredientAvailabilityOptions);
+                return availableRecipes;
+            })
+        );
+
+        return firstValueFrom(source$);
+    },
     getAllIngredientIdsFromRecipes: (requestedRecipes: IRecipe[]): number[] =>{
         return requestedRecipes.reduce((allIngredientIds: number[], curRecipe: IRecipe) => {
             curRecipe.ingredientIds.forEach(ingId => {

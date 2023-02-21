@@ -1,8 +1,8 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonList, IonModal, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { settings } from 'ionicons/icons';
+import { IonButton, IonButtons, IonContent, IonItem, IonList, IonModal, IonPage } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { combineLatest } from 'rxjs';
 import { RecipeSummaryEntry } from '../components/RecipeSummaryEntry';
+import { StandardHeader } from '../components/StandardHeader';
 import { UserSettings } from '../components/UserSettings';
 import { dataManager } from '../services/DataManager';
 import { recipeService } from '../services/RecipeService';
@@ -14,6 +14,7 @@ export const RecipesTab: React.FC = () => {
   const settingsModal = useRef<HTMLIonModalElement>(null);
   const [recipeSummaries, setRecipeSummaries] = useState<IRecipeSummaryViewmodel[]>([]);
   const [showOnlySelected, setShowOnlySelected] = useState<boolean>(false);
+  const settingsToggleId = 'settings-toggle';
   
   useEffect(() => {
     combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$]).subscribe(([selectedRecipeIds, includedDLCIds, ingredientAvailabilityOptions]) => {
@@ -33,16 +34,7 @@ export const RecipesTab: React.FC = () => {
   
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot='primary'>
-            <IonButton id='settings-toggle'>
-              <IonIcon slot='icon-only' icon={settings}></IonIcon>
-            </IonButton>
-          </IonButtons>
-          <IonTitle>Potion Recipes</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <StandardHeader title="Potion Recipes" settingsToggleBtnId={settingsToggleId}></StandardHeader>
       <IonContent fullscreen>
         <IonList>
           <IonItem>
@@ -73,7 +65,7 @@ export const RecipesTab: React.FC = () => {
             })
           }
         </IonList> 
-        <IonModal ref={settingsModal} trigger='settings-toggle'>
+        <IonModal ref={settingsModal} trigger={settingsToggleId}>
           <UserSettings dismiss={() => (settingsModal.current?.dismiss())}></UserSettings>
         </IonModal>
       </IonContent>

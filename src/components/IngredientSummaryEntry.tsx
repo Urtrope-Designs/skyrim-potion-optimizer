@@ -1,8 +1,6 @@
-import { IonButton, IonCard, IonCardContent, IonIcon } from "@ionic/react";
-import { closeOutline } from "ionicons/icons";
+import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonThumbnail } from "@ionic/react";
+import { ban } from "ionicons/icons";
 import { IIngredientViewmodel } from "../types/IngredientViewmodel";
-
-import "./IngredientSummaryEntry.css";
 
 interface IngredientSummaryEntryProps {
     ingredientSummary: IIngredientViewmodel;
@@ -13,15 +11,19 @@ export const IngredientSummaryEntry: React.FC<IngredientSummaryEntryProps> = ({i
     const ingredientSrc = `/assets/ingredients/${ingredientSummary.ingredientName.toLocaleLowerCase().replace(/ /g, '_').replace(/'/g, '')}.png`
     return (
         <div className="ingredientSummaryEntry">
-            <IonCard>
-                <img alt={'picture of ' + ingredientSummary.ingredientName} src={ingredientSrc} className="ion-padding"/>
-                <IonCardContent>
-                    <h2>{ ingredientSummary.ingredientName }</h2>
-                </IonCardContent>
-            </IonCard>
-            <IonButton shape="round" size="small" color="danger" onClick={() => removeIngredient(ingredientSummary)}>
-                <IonIcon slot="icon-only" icon={closeOutline}></IonIcon>
-            </IonButton>
+            <IonItemSliding>
+                <IonItem>
+                    <IonThumbnail slot='start'>
+                        <img alt={'picture of ' + ingredientSummary.ingredientName} src={ingredientSrc}/>
+                    </IonThumbnail>
+                    <IonLabel>{ ingredientSummary.ingredientName }</IonLabel>
+                </IonItem>
+                <IonItemOptions onIonSwipe={() => removeIngredient(ingredientSummary)}>
+                    <IonItemOption expandable color='danger' onClick={() => removeIngredient(ingredientSummary)}>
+                        <IonIcon slot="icon-only" icon={ban}></IonIcon>
+                    </IonItemOption>
+                </IonItemOptions>
+            </IonItemSliding>
         </div>
     );
 }
