@@ -1,6 +1,7 @@
-import { ActionSheetButton, IonCol, IonContent, IonList, IonModal, IonPage, IonRouterLink, useIonActionSheet } from '@ionic/react';
+import { ActionSheetButton, IonButton, IonCol, IonContent, IonIcon, IonItemDivider, IonLabel, IonList, IonModal, IonPage, IonRouterLink, useIonActionSheet } from '@ionic/react';
+import { filter } from 'ionicons/icons';
 import { useEffect, useRef, useState } from 'react';
-import { combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { IngredientSummaryEntry } from '../components/IngredientSummaryEntry';
 import { StandardHeader } from '../components/StandardHeader';
@@ -12,24 +13,31 @@ import { IIngredientViewmodel } from '../types/IngredientViewmodel';
 import { ALL_INGREDIENTS, ALL_RECIPES } from '../utils/constants';
 import './WatchListTab.css';
 
+const toggleSortAlpha$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
 export const WatchListTab: React.FC = () => {
   const [present] = useIonActionSheet();
   const settingsModal = useRef<HTMLIonModalElement>(null);
   const [ingredients, setIngredients] = useState<IIngredientViewmodel[]>([]);
+  const [sortAlpha, setSortAlpha] = useState<boolean>(false);
   const settingsToggleId = 'watchlist-settings-toggle';
 
   useEffect(() => {
-    combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$]).subscribe(([selectedRecipeIds, includedDLCIds, ingredientAvailabilityOptions]) => {
+    combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$, toggleSortAlpha$]).subscribe(([selectedRecipeIds, includedDLCIds, ingredientAvailabilityOptions, doSortAlpha]) => {
       const selectedRecipes = recipeService.getRecipesById(selectedRecipeIds, ALL_RECIPES);
       const availableRecipes = recipeService.getAvailableRecipes(selectedRecipes, ALL_INGREDIENTS, includedDLCIds, ingredientAvailabilityOptions);
       const availableIngredientIds = recipeService.getAllIngredientIdsFromRecipes(availableRecipes);
       const availableIngredients = ingredientsService.getIngredientsById(availableIngredientIds, ALL_INGREDIENTS);
       const ingredientVMs = ingredientsService.getIngredientViewmodels(availableIngredients);
-      ingredientVMs.sort((a, b) => a.ingredientName.localeCompare(b.ingredientName));
+      if (doSortAlpha) {
+        ingredientVMs.sort((a, b) => a.ingredientName.localeCompare(b.ingredientName));
+      }
 
+      setSortAlpha(doSortAlpha);
       setIngredients(ingredientVMs);
     });
   }, []);
+
 
   const confirmRemoveIngredient = (ingredient: IIngredientViewmodel) => {
     present({
@@ -46,12 +54,13 @@ export const WatchListTab: React.FC = () => {
         {
           ingredients?.length 
             ? <IonList>
-                {/* <IonItemDivider sticky={true}>
-                  <IonButton fill='clear' slot='end'>
-                    <span className='ion-padding-end'>Sort</span>
+                <IonItemDivider sticky={true}>
+                  <IonLabel>Sort:</IonLabel>
+                  <IonButton fill='outline' slot='end' color='medium' onClick={() => toggleSortAlpha$.next(!sortAlpha)}>
+                    <span className='ion-padding-end'>{sortAlpha ? 'Alphabetical' : 'By Recipe'}</span>
                     <IonIcon icon={filter}></IonIcon>
                   </IonButton>
-                </IonItemDivider> */}
+                </IonItemDivider>
                 {
                   ingredients.map(ingredient => (
                     <IonCol size='12' key={ingredient.ingredientId}>
