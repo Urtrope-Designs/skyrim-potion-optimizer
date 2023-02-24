@@ -27,10 +27,12 @@ describe('ingredientsService', () => {
                 {
                     ingredientId: testIngredients[0].id,
                     ingredientName: testIngredients[0].name,
+                    sourceDescription: testIngredients[0].sourceDescription,
                 },
                 {
                     ingredientId: testIngredients[1].id,
                     ingredientName: testIngredients[1].name,
+                    sourceDescription: testIngredients[1].sourceDescription,
                 },
             ]
             const result = ingredientsService.getIngredientViewmodels(testIngredients);

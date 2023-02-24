@@ -17,6 +17,7 @@ export const ingredientsService = {
             const vm: IIngredientViewmodel = {
                 ingredientId: i.id,
                 ingredientName: i.name,
+                sourceDescription: i.sourceDescription,
             };
 
             return vm;

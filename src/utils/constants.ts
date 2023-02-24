@@ -116,120 +116,140 @@ export const ALL_INGREDIENTS: IIngredient[] = [
         id: 5,
         merchantAvailabilityId: 5,
         name: 'Bear Claws',
+        sourceDescription: 'Collect from dead Bears. Not sold by merchants unless you have the "Merchant" perk, then it is Uncommon.'
     },
     {
         dLCId: null,
         id: 11,
         merchantAvailabilityId: 2,
         name: 'Blue Butterfly Wing',
+        sourceDescription: 'Collect from Blue Butterflies, often found during the day near flowering plants. Merchant availability is Uncommon.'
     },
     {
         dLCId: null,
         id: 13,
         merchantAvailabilityId: 3,
         name: 'Blue Mountain Flower',
+        sourceDescription: 'Harvest from Blue Mountain Flowers, found throughout Skyrim. Merchant availability is Common. Can be grown in a garden with the Hearthfire expansion.'
     },
     {
         dLCId: null,
         id: 23,
         merchantAvailabilityId: 2,
         name: 'Chicken\'s Egg',
+        sourceDescription: 'Harvest from Chicken nests, found on farms throughout Skyrim. Merchant availability is Uncommon.'
     },
     {
         dLCId: null,
         id: 24,
         merchantAvailabilityId: 2,
         name: 'Creep Cluster',
+        sourceDescription: 'Harvest from Creep Cluster, found in the hot springs area of Eastmarch. Merchant availability is Uncommon. Can be grown in a garden with the Hearthfire expansion.'
     },
     {
         dLCId: null,
         id: 28,
         merchantAvailabilityId: 1,
         name: 'Deathbell',
+        sourceDescription: 'Harvest from Deathbell, found in Hjaalmarch. Merchant availability is Rare. Can be grown in a garden with the Hearthfire expansion.'
     },
     {
         dLCId: null,
         id: 41,
         merchantAvailabilityId: 3,
         name: 'Garlic',
+        sourceDescription: 'Harvest from Garlic braids, found in kitchens everywhere. Merchant availability is common.'
     },
     {
         dLCId: null,
         id: 43,
         merchantAvailabilityId: 1,
         name: 'Giant\'s Toe',
+        sourceDescription: 'Collect from dead Giants, found in Giant Camps. Merchant availability is Rare.'
     },
     {
         dLCId: null,
         id: 45,
         merchantAvailabilityId: 2,
         name: 'Glow Dust',
+        sourceDescription: 'Collect from dead Wisps and Wispmothers. Merchant availability is Uncommon.'
     },
     {
         dLCId: null,
         id: 46,
         merchantAvailabilityId: 0,
         name: 'Glowing Mushroom',
+        sourceDescription: 'Harvest from Glowing Mushrooms, found in various caves. Not sold by merchants. Can be grown in a garden with the Hearthfire expansion.'
     },
     {
         dLCId: null,
         id: 50,
         merchantAvailabilityId: 2,
         name: 'Hanging Moss',
+        sourceDescription: 'Harvest from Hanging Moss, found in various caves, ruins, and burial structures. Merchant availability is Uncommon.'
     },
     {
         dLCId: null,
         id: 54,
         merchantAvailabilityId: 3,
         name: 'Histcarp',
+        sourceDescription: 'Collect from Histcarp fish. Merchant availability is Common.'
     },
     {
         dLCId: null,
         id: 61,
         merchantAvailabilityId: 1,
         name: 'Jazbay Grapes',
+        sourceDescription: 'Harvest from Jazbay vines, found in the hot springs area of Eastmarch. Merchant availability is Rare. Can be grown in a garden with the Hearthfire expansion.'
     },
     {
         dLCId: null,
         id: 63,
         merchantAvailabilityId: 5,
         name: 'Large Antlers',
+        sourceDescription: 'Collect from dead Elk. Not sold by merchants unless you have the "Merchant" perk, then it is Uncommon.'
     },
     {
         dLCId: null,
         id: 71,
         merchantAvailabilityId: 0,
         name: 'Nightshade',
+        sourceDescription: 'Harvest from the Nightshade plant, found throughout Skyrim but especially near cemetaries and vampire hangouts. Not sold by merchants. Can be grown in a garden with the Hearthfire expansion.'
     },
     {
         dLCId: null,
         id: 73,
         merchantAvailabilityId: 2,
         name: 'Nordic Barnacle',
+        sourceDescription: 'Harvest from Nordic Barnacle Clusters, found in or near water. Merchant availability is Uncommon.'
     },
     {
         dLCId: null,
         id: 81,
         merchantAvailabilityId: 3,
         name: 'River Betty',
+        sourceDescription: 'Collect from Histcarp fish. Merchant availability is Common.'
     },
     {
         dLCId: 2,
         id: 84,
         merchantAvailabilityId: 0,
         name: 'Salmon Roe',
+        sourceDescription: 'Collect from River Bettey fish. Merchant availability is Common.'
     },
     {
         dLCId: null,
         id: 86,
         merchantAvailabilityId: 2,
         name: 'Scaly Pholiota',
+        sourceDescription: 'Harvest from the Scaly Pholiota mushrooms, found on dead trees. Merchant availability is Uncommon. Can be grown in a garden with the Hearthfire expansion.'
     },
     {
         dLCId: null,
         id: 109,
         merchantAvailabilityId: 5,
         name: 'Wisp Wrappings',
+        sourceDescription: 'Collect from dead Wispmothers. Merchant availability is Uncommon. Not sold by merchants unless you have the "Merchant" perk, then it is Uncommon.'
     },
 ]
 

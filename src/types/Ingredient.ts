@@ -3,4 +3,5 @@ export interface IIngredient {
     id: number;
     merchantAvailabilityId: number;
     name: string;
+    sourceDescription: string;
 }

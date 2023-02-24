@@ -16,7 +16,10 @@ export const IngredientSummaryEntry: React.FC<IngredientSummaryEntryProps> = ({i
                     <IonThumbnail slot='start'>
                         <img alt={'picture of ' + ingredientSummary.ingredientName} src={ingredientSrc}/>
                     </IonThumbnail>
-                    <IonLabel color='primary'>{ ingredientSummary.ingredientName }</IonLabel>
+                    <IonLabel color='primary'>
+                        <h2>{ ingredientSummary.ingredientName }</h2>
+                        <p className='ion-text-wrap'>{ingredientSummary.sourceDescription}</p>
+                    </IonLabel>
                 </IonItem>
                 <IonItemOptions onIonSwipe={() => removeIngredient(ingredientSummary)}>
                     <IonItemOption expandable color='secondary' onClick={() => removeIngredient(ingredientSummary)}>

@@ -75,7 +75,7 @@ export const recipeService = {
         return viewmodel;
     
         function buildIngredientsListString(ingredients: IIngredient[]): string {
-            return ingredients.map(ingredient => ingredient.name).join(', ');
+            return ingredients.map(ingredient => ingredient.name).join(' - - ');
         }
     }
 }

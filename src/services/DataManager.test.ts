@@ -1,6 +1,4 @@
 import { Observable, skip, Subscription } from "rxjs";
-import { IDLCInstance } from "../types/DLCInstance";
-import { ALL_DLC_INSTANCES } from "../utils/constants";
 import { dataManager } from "./DataManager";
 
 describe('DataManager', () => {
