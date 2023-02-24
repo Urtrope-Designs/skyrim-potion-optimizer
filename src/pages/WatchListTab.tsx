@@ -3,6 +3,7 @@ import { filter } from 'ionicons/icons';
 import { useEffect, useRef, useState } from 'react';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { EmptyListCTA } from '../components/EmptyListCTA';
 import { IngredientSummaryEntry } from '../components/IngredientSummaryEntry';
 import { StandardHeader } from '../components/StandardHeader';
 import { UserSettings } from '../components/UserSettings';
@@ -69,7 +70,7 @@ export const WatchListTab: React.FC = () => {
                   ))
                 }
               </IonList>
-            : <p className='ion-padding'>Head to the <IonRouterLink routerLink='/recipes' routerDirection='none'>Recipes</IonRouterLink> tab to select the ingredients to watch for.</p>
+            : <EmptyListCTA listItemType='Ingredient'></EmptyListCTA>
         }
         <IonModal ref={settingsModal} trigger={settingsToggleId}>
           <UserSettings dismiss={() => (settingsModal.current?.dismiss())}></UserSettings>

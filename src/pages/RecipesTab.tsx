@@ -1,6 +1,7 @@
 import { AlertInput, AlertOptions, IonContent, IonList, IonModal, IonPage, useIonAlert } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { combineLatest, take } from 'rxjs';
+import { EmptyListCTA } from '../components/EmptyListCTA';
 import { RecipeSummaryEntry } from '../components/RecipeSummaryEntry';
 import { StandardHeader } from '../components/StandardHeader';
 import { UserSettings } from '../components/UserSettings';
@@ -40,13 +41,18 @@ export const RecipesTab: React.FC = () => {
     <IonPage>
       <StandardHeader title="Potion Recipes" settingsToggleBtnId={settingsToggleId}></StandardHeader>
       <IonContent fullscreen>
-        <IonList>
-          {
-            recipeSummaries.map(recipe => {
-              return <RecipeSummaryEntry key={recipe.recipeId} recipeSummary={recipe} removeRecipe={confirmRemoveRecipe}></RecipeSummaryEntry>
-            })
-          }
-        </IonList> 
+        {
+          recipeSummaries.length > 0
+            ? <IonList>
+                {
+                  recipeSummaries.map(recipe => {
+                    return <RecipeSummaryEntry key={recipe.recipeId} recipeSummary={recipe} removeRecipe={confirmRemoveRecipe}></RecipeSummaryEntry>
+                  })
+                }
+              </IonList> 
+            : <EmptyListCTA listItemType='Recipe'></EmptyListCTA>
+
+        }
         <IonModal ref={settingsModal} trigger={settingsToggleId}>
           <UserSettings dismiss={() => (settingsModal.current?.dismiss())}></UserSettings>
         </IonModal>
