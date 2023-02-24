@@ -75,7 +75,7 @@ export const UserSettings: React.FC<UserSettingsProps> = ({dismiss}) => {
                         </IonItem>
                     </IonItemGroup>
                 </IonList>
-                <IonButton expand='block' className='ion-padding' onClick={() => {resetToAllAvailableRecipes(); dismiss?.(); }}>
+                <IonButton expand='block' className='ion-padding' onClick={() => {resetToAllAvailableRecipes(); dismiss?.(); }} routerLink='/watchlist' routerDirection='none'>
                     Start with all available
                     <IonIcon slot='end' icon={flask}></IonIcon>
                 </IonButton>

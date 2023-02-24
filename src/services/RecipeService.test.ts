@@ -67,13 +67,13 @@ describe('RecipeService', () => {
         test('builds recipe summary viewmodel', () => {
             const expectedVM: IRecipeSummaryViewmodel[] = [
                 {
-                    ingredientsList: 'ing1\u2003\u2013\u00a0\u2013\u2003ing2',
+                    ingredientsList: 'ing1\u2003\u2014\u2003ing2',
                     isSelected: true,
                     recipeId: 0,
                     standardEffectsList: 'eff1, eff2',
                 },
                 {
-                    ingredientsList: 'ing2\u2003\u2013\u00a0\u2013\u2003ing3',
+                    ingredientsList: 'ing2\u2003\u2014\u2003ing3',
                     isSelected: false,
                     recipeId: 1,
                     standardEffectsList: 'eff3, eff4',

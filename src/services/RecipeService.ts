@@ -75,7 +75,7 @@ export const recipeService = {
         return viewmodel;
     
         function buildIngredientsListString(ingredients: IIngredient[]): string {
-            return ingredients.map(ingredient => ingredient.name).join('\u2003\u2013\u00a0\u2013\u2003');
+            return ingredients.map(ingredient => ingredient.name).join('\u2003\u2014\u2003');
         }
     }
 }

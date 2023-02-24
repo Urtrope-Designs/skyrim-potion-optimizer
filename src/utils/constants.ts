@@ -228,14 +228,14 @@ export const ALL_INGREDIENTS: IIngredient[] = [
         id: 81,
         merchantAvailabilityId: 3,
         name: 'River Betty',
-        sourceDescription: 'Collect from Histcarp fish. Merchant availability is Common.'
+        sourceDescription: 'Collect from River Betty fish. Merchant availability is Common.'
     },
     {
         dLCId: 2,
         id: 84,
         merchantAvailabilityId: 0,
         name: 'Salmon Roe',
-        sourceDescription: 'Collect from River Bettey fish. Merchant availability is Common.'
+        sourceDescription: 'Harvested from jumping Salmon, which you can harvest directly, or from Salmon in most flowing bodies of water (such as the area near the East Empire Company Warehouse near Solitude), which you can kill using arrows, magic, or shouts. Not sold by merchants.'
     },
     {
         dLCId: null,

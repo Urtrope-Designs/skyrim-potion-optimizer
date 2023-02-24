@@ -11,7 +11,7 @@ export const RecipeSummaryEntry: React.FC<RecipeSummaryEntryProps> = ({ recipeSu
   <IonItemSliding>
     <IonItem>
         <IonLabel color='primary' className='ion-text-wrap'>
-          <h3>{recipeSummary.ingredientsList}</h3>
+          <h2>{recipeSummary.ingredientsList}</h2>
           {!!recipeSummary.standardEffectsList && <p>Effects: {recipeSummary.standardEffectsList}</p>}
         </IonLabel>
     </IonItem>

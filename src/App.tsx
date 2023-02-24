@@ -71,11 +71,11 @@ export const App: React.FC = () => {
             <IonTabBar slot="bottom">
               <IonTabButton tab="watchList" href="/watchlist">
                 <IonIcon icon={listCircleOutline} />
-                <IonLabel>Watch List</IonLabel>
+                <IonLabel>Gather</IonLabel>
               </IonTabButton>
               <IonTabButton tab="recipes" href="/recipes">
                 <IonIcon icon={flask} />
-                <IonLabel>Recipes</IonLabel>
+                <IonLabel>Brew</IonLabel>
               </IonTabButton>
             </IonTabBar>
           </IonTabs>

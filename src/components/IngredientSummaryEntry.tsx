@@ -1,6 +1,9 @@
 import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonThumbnail } from "@ionic/react";
-import { ban } from "ionicons/icons";
+import { ban, chevronDown } from "ionicons/icons";
+import { useRef, useState } from "react";
 import { IIngredientViewmodel } from "../types/IngredientViewmodel";
+
+import './IngredientSummaryEntry.css';
 
 interface IngredientSummaryEntryProps {
     ingredientSummary: IIngredientViewmodel;
@@ -8,18 +11,26 @@ interface IngredientSummaryEntryProps {
 }
 
 export const IngredientSummaryEntry: React.FC<IngredientSummaryEntryProps> = ({ingredientSummary, removeIngredient}) => {
-    const ingredientSrc = `/assets/ingredients/${ingredientSummary.ingredientName.toLocaleLowerCase().replace(/ /g, '_').replace(/'/g, '')}.png`
+    const ingredientSrc = `/assets/ingredients/${ingredientSummary.ingredientName.toLocaleLowerCase().replace(/ /g, '_').replace(/'/g, '')}.png`;
+    const [isDetailShown, setIsDetailShown] = useState(false);
+    const ingredientDetailInnerRef = useRef<HTMLIonLabelElement | null>(null);
+    
     return (
         <div className="ingredientSummaryEntry">
             <IonItemSliding>
-                <IonItem>
+                <IonItem onClick={() => setIsDetailShown(!isDetailShown)}>
                     <IonThumbnail slot='start'>
                         <img alt={'picture of ' + ingredientSummary.ingredientName} src={ingredientSrc}/>
                     </IonThumbnail>
-                    <IonLabel color='primary'>
+                    <IonLabel>
                         <h2>{ ingredientSummary.ingredientName }</h2>
-                        <p className='ion-text-wrap'>{ingredientSummary.sourceDescription}</p>
+                        <div className={`item-native ingredientDetail_wrapper${isDetailShown ? ' ingredientDetail_wrapper-detailShown' : ''}`} style={{['--ingredientDetail-innerHeight' as any]: `${ingredientDetailInnerRef.current?.clientHeight}px`}}>
+                            <IonLabel color='primary' className="ion-text-wrap ion-padding stoneDetail_inner" ref={ingredientDetailInnerRef}>
+                                {ingredientSummary.sourceDescription}
+                            </IonLabel>
+                        </div>
                     </IonLabel>
+                    <IonIcon slot="end" icon={chevronDown} className={'ingredientSummary_showMoreButton' + (isDetailShown ? ' ingredientSummary_showMoreButton-detailShown' : '')}/>
                 </IonItem>
                 <IonItemOptions onIonSwipe={() => removeIngredient(ingredientSummary)}>
                     <IonItemOption expandable color='secondary' onClick={() => removeIngredient(ingredientSummary)}>
@@ -27,6 +38,7 @@ export const IngredientSummaryEntry: React.FC<IngredientSummaryEntryProps> = ({i
                     </IonItemOption>
                 </IonItemOptions>
             </IonItemSliding>
+            
         </div>
     );
 }
