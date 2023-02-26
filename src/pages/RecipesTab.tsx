@@ -64,7 +64,7 @@ export const RecipesTab: React.FC = () => {
 function buildRemoveRecipeDialogOptions(ingredients: IIngredient[]): AlertOptions {
   const options: AlertOptions = {
     header: 'Done with this recipe?',
-    message: 'Click "Yes" to hide it from this list until you click the "Start..." button in Settings.<br><br><ion-label class="ion-color ion-color-secondary">Select any ingredients below that were used up while making this recipe:</ion-label>',
+    message: 'Click "Yes" to hide it from this list until you click the "Start..." button in Settings.<br><br><ion-label class="ion-color ion-color-secondary">Select any ingredients that were used up to make this recipe:</ion-label>',
     buttons: [
       {
         text: 'Wait a sec'

@@ -15,7 +15,10 @@ import { Redirect, Route } from 'react-router-dom';
 import { RecipesTab } from './pages/RecipesTab';
 import { WatchListTab } from './pages/WatchListTab';
 import { storage } from './services/Storage';
-import { ALL_DLC_INSTANCES, DEFAULT_AVAILABILITY_OPTIONS_SELECTION, STORAGE_KEY_AVAILABILITY_OPTIONS, STORAGE_KEY_INCLUDED_DLCS, STORAGE_KEY_SELECTED_RECIPES } from './utils/constants';
+import { ALL_DLC_INSTANCES, ALL_RECIPES, DEFAULT_AVAILABILITY_OPTIONS_SELECTION, STORAGE_KEY_AVAILABILITY_OPTIONS, STORAGE_KEY_INCLUDED_DLCS, STORAGE_KEY_SELECTED_RECIPES } from './utils/constants';
+import { distinctUntilChanged, skip } from 'rxjs';
+import { dataManager } from './services/DataManager';
+import { IAvailabilityOptionsSelection } from './types/AvailabilityOptionsSelection';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,11 +37,9 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 
 /* Theme variables */
-import { distinctUntilChanged, skip } from 'rxjs';
-import './App.css';
-import { dataManager } from './services/DataManager';
 import './theme/variables.css';
-import { IAvailabilityOptionsSelection } from './types/AvailabilityOptionsSelection';
+
+import './App.css';
 
 setupIonicReact();
 
@@ -96,7 +97,7 @@ async function initializeValuesFromStorage() {
 
   dataManager.setIncludedDLCIds(DLCIds || ALL_DLC_INSTANCES.map(dLC => dLC.id));
   dataManager.setIngredientAvailabilityOptions({...DEFAULT_AVAILABILITY_OPTIONS_SELECTION, ...availabilityOptions});
-  dataManager.setSelectedRecipeIds(recipeIds || []);
+  dataManager.setSelectedRecipeIds(recipeIds || ALL_RECIPES.map(r => r.id));
 }
 
 function initializeStorageUpdateHandlers() {

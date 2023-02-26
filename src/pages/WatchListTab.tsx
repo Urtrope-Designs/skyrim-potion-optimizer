@@ -50,7 +50,7 @@ export const WatchListTab: React.FC = () => {
   
   return (
     <IonPage>
-      <StandardHeader title="Ingredient List" settingsToggleBtnId={settingsToggleId}></StandardHeader>
+      <StandardHeader title="Highest Value" settingsToggleBtnId={settingsToggleId}></StandardHeader>
       <IonContent>
         {
           ingredients?.length 

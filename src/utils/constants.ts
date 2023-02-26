@@ -4,9 +4,9 @@ import { IIngredient } from "../types/Ingredient";
 import { IMerchantAvailabilityLevel } from "../types/MerchantAvailabilityLevel";
 import { IRecipe } from "../types/Recipe";
 
-export const STORAGE_KEY_INCLUDED_DLCS = 'SPO_SK_INCLUDED_DLCS';
-export const STORAGE_KEY_SELECTED_RECIPES = 'SPO_SK_SELECTED_RECIPES';
-export const STORAGE_KEY_AVAILABILITY_OPTIONS = 'SPO_SK_AVAILABILITY_OPTIONS';
+export const STORAGE_KEY_INCLUDED_DLCS = 'SPC_SK_INCLUDED_DLCS';
+export const STORAGE_KEY_SELECTED_RECIPES = 'SPC_SK_SELECTED_RECIPES';
+export const STORAGE_KEY_AVAILABILITY_OPTIONS = 'SPC_SK_AVAILABILITY_OPTIONS';
 
 export const DEFAULT_AVAILABILITY_OPTIONS_SELECTION: IAvailabilityOptionsSelection = {
     noMerchants: true,
