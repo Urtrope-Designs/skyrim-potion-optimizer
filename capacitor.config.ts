@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'skyrim-potion-optimizer',
+  appId: 'com.urtropedesigns.potioncompanion',
+  appName: 'skyrim-potion-companion',
   webDir: 'build',
   bundledWebRuntime: false
 };

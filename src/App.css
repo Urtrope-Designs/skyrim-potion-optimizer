@@ -1,0 +1,16 @@
+html.ios #root {
+    --ion-default-font: "Montserrat", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Roboto", sans-serif;
+}
+
+html.md #root {
+    --ion-default-font: "Montserrat", "Roboto", "Helvetica Neue", sans-serif;
+}
+
+html #root {
+    --ion-font-family: var(--ion-default-font);
+    font-family: var(--ion-font-family);
+}
+
+.display-flex {
+    display: flex !important;
+}
