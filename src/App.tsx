@@ -1,24 +1,17 @@
 import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact
+  IonApp, IonRouterOutlet,
+  IonSplitPane, setupIonicReact
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { flask, listCircleOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { RecipesTab } from './pages/RecipesTab';
-import { WatchListTab } from './pages/WatchListTab';
-import { storage } from './services/Storage';
-import { ALL_DLC_INSTANCES, ALL_RECIPES, DEFAULT_AVAILABILITY_OPTIONS_SELECTION, STORAGE_KEY_AVAILABILITY_OPTIONS, STORAGE_KEY_INCLUDED_DLCS, STORAGE_KEY_SELECTED_RECIPES } from './utils/constants';
 import { distinctUntilChanged, skip } from 'rxjs';
+import { RecipesPage } from './pages/RecipesPage';
+import { WatchListTab } from './pages/WatchListTab';
 import { dataManager } from './services/DataManager';
+import { storage } from './services/Storage';
 import { IAvailabilityOptionsSelection } from './types/AvailabilityOptionsSelection';
+import { ALL_DLC_INSTANCES, DEFAULT_AVAILABILITY_OPTIONS_SELECTION, STORAGE_KEY_AVAILABILITY_OPTIONS, STORAGE_KEY_INCLUDED_DLCS, STORAGE_KEY_SELECTED_RECIPES } from './utils/constants';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -40,6 +33,7 @@ import '@ionic/react/css/text-transformation.css';
 import './theme/variables.css';
 
 import './App.css';
+import { AlchemySessionSelectionPage } from './pages/AlchemySessionSelectionPage';
 
 setupIonicReact();
 
@@ -57,29 +51,22 @@ export const App: React.FC = () => {
     ) : (
       <IonApp>
         <IonReactRouter>
-          <IonTabs>
-            <IonRouterOutlet>
-              <Route exact path="/recipes">
-                <RecipesTab/>
+          <IonSplitPane contentId='main'>
+            <IonRouterOutlet id='main'>
+              <Route exact path='/recipes'>
+                <RecipesPage/>
               </Route>
-              <Route exact path="/watchlist">
+              <Route exact path='/watchlist'>
                 <WatchListTab/>
               </Route>
-              <Route exact path="/">
-                <Redirect to="/watchlist" />
+              <Route exact path='/select'>
+                <AlchemySessionSelectionPage/>
+              </Route>
+              <Route>
+                <Redirect to='/recipes' />
               </Route>
             </IonRouterOutlet>
-            <IonTabBar slot="bottom">
-              <IonTabButton tab="watchList" href="/watchlist">
-                <IonIcon icon={listCircleOutline} />
-                <IonLabel>Gather</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="recipes" href="/recipes">
-                <IonIcon icon={flask} />
-                <IonLabel>Brew</IonLabel>
-              </IonTabButton>
-            </IonTabBar>
-          </IonTabs>
+          </IonSplitPane>
         </IonReactRouter>
       </IonApp>
     );
@@ -97,7 +84,7 @@ async function initializeValuesFromStorage() {
 
   dataManager.setIncludedDLCIds(DLCIds || ALL_DLC_INSTANCES.map(dLC => dLC.id));
   dataManager.setIngredientAvailabilityOptions({...DEFAULT_AVAILABILITY_OPTIONS_SELECTION, ...availabilityOptions});
-  dataManager.setSelectedRecipeIds(recipeIds || ALL_RECIPES.map(r => r.id));
+  dataManager.setSelectedRecipeIds(recipeIds || []);
 }
 
 function initializeStorageUpdateHandlers() {

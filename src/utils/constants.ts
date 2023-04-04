@@ -1,3 +1,4 @@
+import { IAlchemySession } from "../types/AlchemySession";
 import { IAvailabilityOptionsSelection } from "../types/AvailabilityOptionsSelection";
 import { IDLCInstance } from "../types/DLCInstance";
 import { IIngredient } from "../types/Ingredient";
@@ -11,6 +12,27 @@ export const STORAGE_KEY_AVAILABILITY_OPTIONS = 'SPC_SK_AVAILABILITY_OPTIONS';
 export const DEFAULT_AVAILABILITY_OPTIONS_SELECTION: IAvailabilityOptionsSelection = {
     noMerchants: true,
 };
+
+export const ALL_ALCHEMY_SESSIONS: IAlchemySession[] = [
+    {
+        filterRecipePredicate: (recipe: IRecipe) => recipe.ingredientIds.includes(84),
+        id: 0,
+        name: 'with Salmon Roe',
+        sessionCategory: 'Best leveling potions',
+    },
+    {
+        filterRecipePredicate: (recipe: IRecipe) => recipe.ingredientIds.includes(43),
+        id: 1,
+        name: 'with Giant\'s Toe',
+        sessionCategory: 'Best leveling potions',
+    },
+    {
+        filterRecipePredicate: (recipe: IRecipe) => recipe.ingredientIds.find(id => [84,43].includes(id)) === undefined,
+        id: 2,
+        name: 'without Salmon Roe or Giant\'s Toe',
+        sessionCategory: 'Best leveling potions',
+    },
+];
 
 export const ALL_DLC_INSTANCES: IDLCInstance[] = [
     {
@@ -30,85 +52,6 @@ export const ALL_DLC_INSTANCES: IDLCInstance[] = [
         name: 'Creation Club',
     },
 ];
-export const ALL_RECIPES: IRecipe[] = [
-    {
-        id: 0,
-        ingredientIds: [41, 73, 84],
-        standardEffects: ['Regenerate Health', 'Regenerate Magicka', 'Waterbreathing'],
-        //1761
-    },
-    {
-        id: 1,
-        ingredientIds: [23, 71, 84],
-        standardEffects: ['Damage Magicka Regen', 'Lingering Damage Stamina', 'Waterbreathing'],
-        //1691
-    },
-    {
-        id: 2,
-        ingredientIds: [54, 61, 84],
-        standardEffects: ['Fortify Magicka', 'Regenerate Magicka', 'Restore Stamina', 'Waterbreathing'],
-        //1689
-    },
-    {
-        id: 5,
-        ingredientIds: [5, 43, 50],
-        standardEffects: ['Damage Magicka Regen', 'Fortify Health', 'Fortify One-handed'],
-        //795
-    },
-    {
-        id: 6,
-        ingredientIds: [11, 13, 43],
-        standardEffects: ['Damage Magicka Regen', 'Damage Stamina', 'Fortify Conjuration', 'Fortify Health'],
-    },
-    {
-        id: 7,
-        ingredientIds: [24, 43, 50],
-        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Fortify Health'],
-    },
-    {
-        id: 8,
-        ingredientIds: [5, 24, 43],
-        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Fortify Health'],
-    },
-    {
-        id: 9,
-        ingredientIds: [13, 24, 43],
-        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Fortify Health'],
-    },
-    {
-        id: 10,
-        ingredientIds: [45, 46, 50],
-        standardEffects: ['Damage Magicka', 'Damage Magicka Regen', 'Fortify Destruction', 'Fortify Health', 'Resist Shock'],
-    },
-    {
-        id: 11,
-        ingredientIds: [24, 63, 81],
-        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Slow'],
-    },
-    {
-        id: 12,
-        ingredientIds: [24, 28, 81],
-        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Slow'],
-    },
-    {
-        id: 13,
-        ingredientIds: [28, 81, 109],
-        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Slow'],
-    },
-    {
-        id: 14,
-        ingredientIds: [28, 81, 86],
-        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Slow'],
-    },
-];
-// SR, fungus stalk, garlic (2091: waterbreathing, fortify stamina, magicka regen)
-// try salmon roe, histcarp, salt pile (1689); also combinations of 
-// chicken's egg, SR, garlic (1597)
-// chix egg, sr, salt pile (1597)
-// chix egg, sr, nordic barnacle (1597: waterbreathing, magicka regen)
-// chix egg, sr, nordic barnacle (1432)
-
-//sr, salt, garlic (164)
 
 export const ALL_INGREDIENTS: IIngredient[] = [
     {
@@ -251,7 +194,7 @@ export const ALL_INGREDIENTS: IIngredient[] = [
         name: 'Wisp Wrappings',
         sourceDescription: 'Collect from dead Wispmothers. Merchant availability is Uncommon. Not sold by merchants unless you have the "Merchant" perk, then it is Uncommon.'
     },
-]
+];
 
 export const ALL_MERCHANT_AVAILABILITY_LEVELS: IMerchantAvailabilityLevel[] = [
     {
@@ -283,3 +226,83 @@ export const ALL_MERCHANT_AVAILABILITY_LEVELS: IMerchantAvailabilityLevel[] = [
         name: 'Common with Merchant perk',
     },
 ];
+
+export const ALL_RECIPES: IRecipe[] = [
+    {
+        id: 0,
+        ingredientIds: [41, 73, 84],
+        standardEffects: ['Regenerate Health', 'Regenerate Magicka', 'Waterbreathing'],
+        //1761
+    },
+    {
+        id: 1,
+        ingredientIds: [23, 71, 84],
+        standardEffects: ['Damage Magicka Regen', 'Lingering Damage Stamina', 'Waterbreathing'],
+        //1691
+    },
+    {
+        id: 2,
+        ingredientIds: [54, 61, 84],
+        standardEffects: ['Fortify Magicka', 'Regenerate Magicka', 'Restore Stamina', 'Waterbreathing'],
+        //1689
+    },
+    {
+        id: 5,
+        ingredientIds: [5, 43, 50],
+        standardEffects: ['Damage Magicka Regen', 'Fortify Health', 'Fortify One-handed'],
+        //795
+    },
+    {
+        id: 6,
+        ingredientIds: [11, 13, 43],
+        standardEffects: ['Damage Magicka Regen', 'Damage Stamina', 'Fortify Conjuration', 'Fortify Health'],
+    },
+    {
+        id: 7,
+        ingredientIds: [24, 43, 50],
+        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Fortify Health'],
+    },
+    {
+        id: 8,
+        ingredientIds: [5, 24, 43],
+        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Fortify Health'],
+    },
+    {
+        id: 9,
+        ingredientIds: [13, 24, 43],
+        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Fortify Health'],
+    },
+    {
+        id: 10,
+        ingredientIds: [45, 46, 50],
+        standardEffects: ['Damage Magicka', 'Damage Magicka Regen', 'Fortify Destruction', 'Fortify Health', 'Resist Shock'],
+    },
+    {
+        id: 11,
+        ingredientIds: [24, 63, 81],
+        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Slow'],
+    },
+    {
+        id: 12,
+        ingredientIds: [24, 28, 81],
+        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Slow'],
+    },
+    {
+        id: 13,
+        ingredientIds: [28, 81, 109],
+        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Slow'],
+    },
+    {
+        id: 14,
+        ingredientIds: [28, 81, 86],
+        standardEffects: ['Damage Stamina Regen', 'Fortify Carry Weight', 'Slow'],
+    },
+];
+// SR, fungus stalk, garlic (2091: waterbreathing, fortify stamina, magicka regen)
+// try salmon roe, histcarp, salt pile (1689); also combinations of 
+// chicken's egg, SR, garlic (1597)
+// chix egg, sr, salt pile (1597)
+// chix egg, sr, nordic barnacle (1597: waterbreathing, magicka regen)
+// chix egg, sr, nordic barnacle (1432)
+
+//sr, salt, garlic (164)

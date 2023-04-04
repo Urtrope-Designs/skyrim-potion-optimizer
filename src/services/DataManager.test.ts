@@ -1,11 +1,12 @@
-import { Observable, skip, Subscription } from "rxjs";
+import { Subscription, take } from "rxjs";
+import { skipReplay, TEST_ALCHEMY_SESSIONS, TEST_RECIPES } from "../utils/TestUtils";
+import { alchemySessionService } from "./AlchemySessionService";
 import { dataManager } from "./DataManager";
+import { recipeService } from "./RecipeService";
+
+jest.mock( './RecipeService' );
 
 describe('DataManager', () => {
-    const skipReplay = <T>(observable: Observable<T>): Observable<T> => {
-        return observable.pipe(skip(1));
-    }
-
     describe('Selected Recipes', () => {
         afterAll(() => {
             dataManager.setSelectedRecipeIds([]);
@@ -226,6 +227,61 @@ describe('DataManager', () => {
                     done(error);
                 }
             }, 100);
+        });
+    });
+
+    describe('Selected AlchemySession', () => {
+        const filterCurrentlyAvailableRecipesMock = jest.spyOn(recipeService, 'filterCurrentlyAvailableRecipes');
+        afterAll(() => {
+            dataManager.setSelectedAlchemySessionId(-1);
+            filterCurrentlyAvailableRecipesMock.mockRestore();
+        });
+
+        beforeEach(() => {
+            dataManager.setSelectedAlchemySessionId(-1);
+        })
+        
+        let selectedAlchemySessionIdSubscription: Subscription;
+        const testAlchemySessionId = 0;
+
+        afterEach(() => {
+            if (selectedAlchemySessionIdSubscription) {
+                selectedAlchemySessionIdSubscription.unsubscribe();
+            }
+        });
+
+        test('sets the selected alchemy session id', done => {
+            filterCurrentlyAvailableRecipesMock.mockImplementation(() => Promise.resolve([]));
+            selectedAlchemySessionIdSubscription = skipReplay(dataManager.selectedAlchemySessionId$).subscribe(id => {
+                try {
+                    expect(id).toEqual(testAlchemySessionId);
+                    done();
+                } catch (error) {
+                    done(error);
+                }
+            });
+
+            dataManager.updateAlchemySessionSelection(testAlchemySessionId);
+        });
+
+        test('updates selected recipes', done => {
+            const expectedRecipeIds = TEST_RECIPES.map(r => r.id);
+            filterCurrentlyAvailableRecipesMock.mockImplementation(() => Promise.resolve(TEST_RECIPES));
+            const alchemySessionGetByIdMock = jest.spyOn(alchemySessionService, 'getById');
+            alchemySessionGetByIdMock.mockImplementation(() => TEST_ALCHEMY_SESSIONS[testAlchemySessionId]);
+            dataManager.setSelectedRecipeIds([]);
+            skipReplay(dataManager.selectedRecipeIds$).pipe(take(1)).subscribe(ids => {
+                try {
+                    expect(ids).toEqual(expectedRecipeIds);
+                    done();
+                } catch (error) {
+                    done(error);
+                } finally {
+                    alchemySessionGetByIdMock.mockRestore();
+                }
+            });
+
+            dataManager.updateAlchemySessionSelection(testAlchemySessionId);
         });
     });
 });

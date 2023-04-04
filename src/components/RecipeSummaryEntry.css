@@ -1,0 +1,14 @@
+ion-card {
+    --background: linear-gradient(180deg, #185836 0%, #103820 100%);
+    --background: linear-gradient(45deg, #186637 0%, #154430 100%);
+    --background: linear-gradient(225deg, #528661 0%, #153026 100%);
+    --background: linear-gradient(225deg, #186637 0%, #153026 80%);
+    --background: linear-gradient(225deg, #14446A 0%, #2B273B 100%);
+}
+
+.list-ios.list-inset.ion-no-margin {
+    margin-left: var(--margin-start);
+    margin-right: var(--margin-end);
+    margin-top: var(--margin-top);
+    margin-bottom: var(--margin-bottom);
+}

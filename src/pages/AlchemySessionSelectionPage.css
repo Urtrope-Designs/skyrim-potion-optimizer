@@ -1,0 +1,4 @@
+.text-color-primary {
+    --color: var(--ion-color-primary);
+    --color-rgb: var(--ion-color-primary-rgb);
+}

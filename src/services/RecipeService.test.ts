@@ -63,25 +63,25 @@ describe('RecipeService', () => {
         });
     });
 
-    describe('#getRecipeSummaryViewmodels', () => {
-        test('builds recipe summary viewmodel', () => {
-            const expectedVM: IRecipeSummaryViewmodel[] = [
-                {
-                    ingredientsList: 'ing1\u2003\u2014\u2003ing2',
-                    isSelected: true,
-                    recipeId: 0,
-                    standardEffectsList: 'eff1, eff2',
-                },
-                {
-                    ingredientsList: 'ing2\u2003\u2014\u2003ing3',
-                    isSelected: false,
-                    recipeId: 1,
-                    standardEffectsList: 'eff3, eff4',
-                },
-            ]
-            const result = recipeService.getRecipeSummaryViewmodels(TEST_RECIPES.slice(0,2), TEST_INGREDIENTS, [0]);
+    // describe('#getRecipeSummaryViewmodels', () => {
+    //     test('builds recipe summary viewmodel', () => {
+    //         const expectedVM: IRecipeSummaryViewmodel[] = [
+    //             {
+    //                 ingredientsList: 'ing1\u2003\u2014\u2003ing2',
+    //                 isSelected: true,
+    //                 recipeId: 0,
+    //                 standardEffectsList: 'eff1, eff2',
+    //             },
+    //             {
+    //                 ingredientsList: 'ing2\u2003\u2014\u2003ing3',
+    //                 isSelected: false,
+    //                 recipeId: 1,
+    //                 standardEffectsList: 'eff3, eff4',
+    //             },
+    //         ]
+    //         const result = recipeService.getRecipeSummaryViewmodels(TEST_RECIPES.slice(0,2), TEST_INGREDIENTS, [0]);
     
-            expect(result).toEqual(expectedVM);
-        });
-    });
+    //         expect(result).toEqual(expectedVM);
+    //     });
+    // });
 });

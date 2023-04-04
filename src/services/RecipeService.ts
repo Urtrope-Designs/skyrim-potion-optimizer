@@ -39,14 +39,14 @@ export const recipeService = {
         return availableRecipes;
 
         function isRecipeAvailable(curRecipe: IRecipe): boolean {
-            const recipeIngredients = ingredientsService.getIngredientsById(curRecipe.ingredientIds, allIngredients);
+            const recipeIngredients = ingredientsService.getByIds(curRecipe.ingredientIds, allIngredients);
             const areAllDLCsSelected = recipeIngredients.every(ingredient => ingredient.dLCId === null || includedDLCIds.includes(ingredient.dLCId));
             const areAllAvailabilityOptionsSatisfied: boolean = testAvailabilityOptions(curRecipe);
             return areAllDLCsSelected && areAllAvailabilityOptionsSatisfied;
         }
 
         function testAvailabilityOptions(curRecipe: IRecipe): boolean {
-            const recipeIngredients = ingredientsService.getIngredientsById(curRecipe.ingredientIds, allIngredients);
+            const recipeIngredients = ingredientsService.getByIds(curRecipe.ingredientIds, allIngredients);
             return ingredientAvailabilityOptions.noMerchants || recipeIngredients.every(ingredient => ingredient.merchantAvailabilityId > 0 && ingredient.merchantAvailabilityId <= 3);
         }
     },
@@ -60,12 +60,12 @@ export const recipeService = {
             return recipe;
         });
     },
-    getRecipeSummaryViewmodels: (availableRecipes: IRecipe[], allIngredients: IIngredient[], selectedRecipeIds: number[]): IRecipeSummaryViewmodel[] => {
+    getRecipeSummaryViewmodels: (availableRecipes: IRecipe[], allIngredients: IIngredient[]): IRecipeSummaryViewmodel[] => {
         const viewmodel: IRecipeSummaryViewmodel[] = availableRecipes.map((curRecipe: IRecipe) => {
             const newRecipeVM: IRecipeSummaryViewmodel = {
-                ingredientsList: buildIngredientsListString(ingredientsService.getIngredientsById(curRecipe.ingredientIds, allIngredients)),
-                isSelected: selectedRecipeIds.includes(curRecipe.id),
+                ingredients: ingredientsService.getViewmodels(ingredientsService.getByIds(curRecipe.ingredientIds, allIngredients)),
                 recipeId: curRecipe.id,
+                recipeName: curRecipe.standardEffects[0],
                 standardEffectsList: curRecipe.standardEffects.join(', '),
             };
     
@@ -73,9 +73,5 @@ export const recipeService = {
         });
     
         return viewmodel;
-    
-        function buildIngredientsListString(ingredients: IIngredient[]): string {
-            return ingredients.map(ingredient => ingredient.name).join('\u2003\u2014\u2003');
-        }
     }
 }
