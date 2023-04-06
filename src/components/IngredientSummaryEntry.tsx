@@ -42,6 +42,9 @@ export const IngredientSummaryEntry: React.FC<IngredientSummaryEntryProps> = ({i
             </IonItemSliding>
             <div className={`item-native ingredientDetail_wrapper${isDetailShown ? ' ingredientDetail_wrapper-detailShown' : ''}`} style={{['--ingredientDetail-innerHeight' as any]: `${ingredientDetailInnerRef.current?.clientHeight}px`}}>
                 <div className={`ingredientDetail_inner ion-padding${isDetailShown ? ' animate-fade-in' : ''}`} ref={ingredientDetailInnerRef}>
+                    <IonThumbnail>
+                        <img alt={'picture of ' + ingredientSummary.ingredientName} src={ingredientSrc}/>
+                    </IonThumbnail>
                     <IonLabel color='primary' className='ion-text-wrap'>
                         {ingredientSummary.sourceDescription}
                     </IonLabel>
