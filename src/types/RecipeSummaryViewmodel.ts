@@ -1,6 +1,8 @@
+import { IIngredientViewmodel } from "./IngredientViewmodel";
+
 export interface IRecipeSummaryViewmodel {
-    ingredientsList: string;
-    isSelected: boolean;
+    ingredients: IIngredientViewmodel[];
     recipeId: number;
+    recipeName: string;
     standardEffectsList: string;
 }

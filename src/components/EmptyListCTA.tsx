@@ -1,20 +1,15 @@
-import { IonLabel } from "@ionic/react";
-import { dataManager } from "../services/DataManager";
-import { recipeService } from "../services/RecipeService";
-import { ALL_RECIPES } from "../utils/constants";
+import { IonRouterLink } from "@ionic/react";
 
 interface EmptyListCTAProps {
     listItemType: string;
 }
 
-async function restartRecipes() {
-    const availableRecipes = await recipeService.filterCurrentlyAvailableRecipes(ALL_RECIPES);
-    dataManager.setSelectedRecipeIds(availableRecipes.map(recipe => recipe.id));
-}
-
 export const EmptyListCTA: React.FC<EmptyListCTAProps> = ({listItemType}) => (
     <p className='ion-padding'>
-        Looks like you've worked through all the { listItemType }s that match your availability settings. 
-        Adjust those settings by tapping the gear icon above, or <IonLabel color='primary' onClick={() => restartRecipes()}>click here to start a new potion brewing session</IonLabel>!
+        Looks like you've worked through all the { listItemType }s in your selected Alchemy session. 
+        <br /><br />
+        Tap the "Potion" icon above or 
+            <IonRouterLink routerLink='/select' color='primary'> start a new potion brewing session</IonRouterLink>
+        !
     </p>
 )

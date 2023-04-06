@@ -1,0 +1,12 @@
+.header-title {
+    overflow: visible;
+    text-overflow: unset;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    word-break: break-word;
+    font-size: 1.1rem;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    margin: 0;
+}

@@ -11,6 +11,33 @@ html #root {
     font-family: var(--ion-font-family);
 }
 
+ion-header h1 {
+    font-size: 20px;
+}
+
+ion-header h2 {
+    font-size: 18px;
+}
+
 .display-flex {
     display: flex !important;
+}
+
+ion-header ion-toolbar {
+    --min-height: 54px;
+}
+
+.animate-fade-in {
+    animation: 400ms ease-in forwards fade-in;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(0.5rem);
+    }
+    100% {
+        opactiy: 1;
+        transform: translateY(0);
+    }
 }
