@@ -11,7 +11,7 @@ import { WatchListTab } from './pages/WatchListTab';
 import { dataManager } from './services/DataManager';
 import { storage } from './services/Storage';
 import { IAvailabilityOptionsSelection } from './types/AvailabilityOptionsSelection';
-import { ALL_DLC_INSTANCES, DEFAULT_AVAILABILITY_OPTIONS_SELECTION, STORAGE_KEY_AVAILABILITY_OPTIONS, STORAGE_KEY_INCLUDED_DLCS, STORAGE_KEY_SELECTED_RECIPES } from './utils/constants';
+import { ALL_DLC_INSTANCES, DEFAULT_AVAILABILITY_OPTIONS_SELECTION, STORAGE_KEY_AVAILABILITY_OPTIONS, STORAGE_KEY_INCLUDED_DLCS, STORAGE_KEY_SELECTED_ALCHEMY_SESSION, STORAGE_KEY_SELECTED_RECIPES } from './utils/constants';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -78,13 +78,15 @@ async function initializeApp() {
 }
 
 async function initializeValuesFromStorage() {
-  const DLCIds: number[] = await storage.get(STORAGE_KEY_INCLUDED_DLCS);
-  const availabilityOptions: IAvailabilityOptionsSelection = await storage.get(STORAGE_KEY_AVAILABILITY_OPTIONS);
-  const recipeIds: number[] = await storage.get(STORAGE_KEY_SELECTED_RECIPES);
+  const DLCIds: number[] | undefined = await storage.get(STORAGE_KEY_INCLUDED_DLCS);
+  const availabilityOptions: IAvailabilityOptionsSelection | undefined = await storage.get(STORAGE_KEY_AVAILABILITY_OPTIONS);
+  const recipeIds: number[] | undefined = await storage.get(STORAGE_KEY_SELECTED_RECIPES);
+  const alchemySessionId: number | undefined = await storage.get(STORAGE_KEY_SELECTED_ALCHEMY_SESSION);
 
-  dataManager.setIncludedDLCIds(DLCIds || ALL_DLC_INSTANCES.map(dLC => dLC.id));
+  dataManager.setIncludedDLCIds(DLCIds ?? ALL_DLC_INSTANCES.map(dLC => dLC.id));
   dataManager.setIngredientAvailabilityOptions({...DEFAULT_AVAILABILITY_OPTIONS_SELECTION, ...availabilityOptions});
-  dataManager.setSelectedRecipeIds(recipeIds || []);
+  dataManager.setSelectedAlchemySessionId(alchemySessionId ?? -1);
+  dataManager.setSelectedRecipeIds(recipeIds ?? []);
 }
 
 function initializeStorageUpdateHandlers() {
@@ -94,6 +96,9 @@ function initializeStorageUpdateHandlers() {
   dataManager.ingredientAvailabilityOptions$.pipe(skip(1), distinctUntilChanged()).subscribe(availabilityOptions => {
     storage.set(STORAGE_KEY_AVAILABILITY_OPTIONS, availabilityOptions)
   })
+  dataManager.selectedAlchemySessionId$.pipe(skip(1), distinctUntilChanged()).subscribe(alchemySessionId => {
+    storage.set(STORAGE_KEY_SELECTED_ALCHEMY_SESSION, alchemySessionId);
+  });
   dataManager.selectedRecipeIds$.pipe(skip(1), distinctUntilChanged()).subscribe(recipeIds => {
     storage.set(STORAGE_KEY_SELECTED_RECIPES, recipeIds);
   });
