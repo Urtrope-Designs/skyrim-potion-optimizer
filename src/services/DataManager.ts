@@ -3,6 +3,7 @@ import { IAvailabilityOptionsSelection } from '../types/AvailabilityOptionsSelec
 import { ALL_ALCHEMY_SESSIONS, ALL_RECIPES } from '../utils/constants';
 import { alchemySessionService } from './AlchemySessionService';
 import { recipeService } from './RecipeService';
+import { IIdSelectionUpdate } from '../types/IdSelectionUpdate';
 
 const _includedDLCIds$: ReplaySubject<number[]> = new ReplaySubject<number[]>(1);
 const _ingredientAvailabilityOptions$: ReplaySubject<IAvailabilityOptionsSelection> = new ReplaySubject<IAvailabilityOptionsSelection>(1);
@@ -18,13 +19,20 @@ export const dataManager = {
     setIngredientAvailabilityOptions: (newSelection: IAvailabilityOptionsSelection) => _ingredientAvailabilityOptions$.next(newSelection),
     setSelectedAlchemySessionId: (newId: number) => _selectedAlchemySessionId$.next(newId),
     setSelectedRecipeIds: (newRecipeIds: number[]) => _selectedRecipeIds$.next(newRecipeIds),
-    updateDLCInclusion: (dLCIdToUpdate: number, isSelected: boolean) => {
+    updateDLCInclusion: (inclusionUpdates: IIdSelectionUpdate[]) => {
         getCurrentValueIfSet(_includedDLCIds$).subscribe(curIncludedDLCIds => {
-            if (isSelected && !curIncludedDLCIds.includes(dLCIdToUpdate)) {
-                _includedDLCIds$.next([...curIncludedDLCIds, dLCIdToUpdate]);
-            } else if (!isSelected && curIncludedDLCIds.includes(dLCIdToUpdate)) {
-                _includedDLCIds$.next(curIncludedDLCIds.filter(dLC => dLC !== dLCIdToUpdate));
-            }
+            const updatedDLCIds = inclusionUpdates.reduce((includedDLCIds, curUpdate) => {
+                if (curUpdate.isSelected && !curIncludedDLCIds.includes(curUpdate.id)) {
+                    return [...includedDLCIds, curUpdate.id];
+                } else if (!curUpdate.isSelected && curIncludedDLCIds.includes(curUpdate.id)) {
+                    return includedDLCIds.filter(dLC => dLC !== curUpdate.id);
+                } else {
+                    return includedDLCIds;
+                }
+
+            }, curIncludedDLCIds);
+
+            _includedDLCIds$.next(updatedDLCIds);
         });
     },
     updateIngredientAvailabilityOptions: (newOption: keyof IAvailabilityOptionsSelection, isSelected: boolean) => {

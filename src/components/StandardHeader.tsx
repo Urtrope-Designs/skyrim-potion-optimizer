@@ -1,5 +1,5 @@
-import { IonButton, IonButtons, IonHeader, IonIcon, IonToolbar } from "@ionic/react";
-import { flask, settings } from "ionicons/icons";
+import { IonBackButton, IonButton, IonButtons, IonHeader, IonIcon, IonToolbar } from "@ionic/react";
+import { settings } from "ionicons/icons";
 
 import './StandardHeader.css';
 
@@ -13,11 +13,9 @@ export const StandardHeader: React.FC<StandardHeaderProps> = ({title, settingsTo
         <IonHeader>
             <IonToolbar className='flex'>
                 <IonButtons slot='start'>
-                    <IonButton routerLink="/select">
-                        <IonIcon color='primary' slot='icon-only' icon={flask}></IonIcon>
-                    </IonButton>
+                    <IonBackButton text='' defaultHref='/select'></IonBackButton>
                 </IonButtons>
-                <span className='header-title'>{title}</span>
+                <h2 className='header-title'>{title}</h2>
                 <IonButtons slot='end'>
                     <IonButton id={settingsToggleBtnId}>
                         <IonIcon color='primary' slot='icon-only' icon={settings}></IonIcon>

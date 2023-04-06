@@ -11,6 +11,7 @@ import { IRecipe } from '../types/Recipe';
 import { IRecipeSummaryViewmodel } from '../types/RecipeSummaryViewmodel';
 import { ALL_ALCHEMY_SESSIONS, ALL_INGREDIENTS, ALL_RECIPES } from '../utils/constants';
 import { UserSettings } from '../components/UserSettings';
+import { IAvailabilityOptionsSelection } from '../types/AvailabilityOptionsSelection';
 
 export const RecipesPage: React.FC = () => {
   const [recipeSummaries, setRecipeSummaries] = useState<IRecipeSummaryViewmodel[]>([]);
@@ -21,10 +22,7 @@ export const RecipesPage: React.FC = () => {
   useEffect(() => {
     const recipeState$ = combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$]);
     const subscription = recipeState$.subscribe(([selectedRecipeIds, includedDLCIds, ingredientAvailabilityOptions]) => {
-      const availableRecipes = recipeService.getAvailableRecipes(ALL_RECIPES, ALL_INGREDIENTS, includedDLCIds, ingredientAvailabilityOptions);
-      const selectedRecipes = availableRecipes.filter(aR => selectedRecipeIds.includes(aR.id));
-      const recipeViewmodels = recipeService.getRecipeSummaryViewmodels(selectedRecipes, ALL_INGREDIENTS);
-      setRecipeSummaries(recipeViewmodels);
+      setRecipeSummaries(buildActiveRecipeSummaries(selectedRecipeIds, includedDLCIds, ingredientAvailabilityOptions));
     });
 
     return () => {
@@ -34,9 +32,7 @@ export const RecipesPage: React.FC = () => {
 
   useEffect(() => {
     const subscription = dataManager.selectedAlchemySessionId$.subscribe(selectedAlchemySessionId => {
-      const selectedAlchemySession = alchemySessionService.getById(selectedAlchemySessionId, ALL_ALCHEMY_SESSIONS);
-      const headerText = selectedAlchemySession.sessionCategory + ': ' + selectedAlchemySession.name;
-      setHeaderText(headerText);
+      setHeaderText(buildHeaderText(selectedAlchemySessionId));
     });
 
     return () => {
@@ -78,3 +74,18 @@ export const RecipesPage: React.FC = () => {
     </IonPage>
   );
 };
+
+function buildActiveRecipeSummaries(selectedRecipeIds: number[], includedDLCIds: number[], ingredientAvailabilityOptions: IAvailabilityOptionsSelection): IRecipeSummaryViewmodel[] {
+  const availableRecipes = recipeService.getAvailableRecipes(ALL_RECIPES, ALL_INGREDIENTS, includedDLCIds, ingredientAvailabilityOptions);
+  const selectedRecipes = availableRecipes.filter(aR => selectedRecipeIds.includes(aR.id));
+  const recipeViewmodels = recipeService.getRecipeSummaryViewmodels(selectedRecipes, ALL_INGREDIENTS);
+  
+  return recipeViewmodels;
+}
+
+function buildHeaderText(selectedAlchemySessionId: number): string {
+  const selectedAlchemySession = alchemySessionService.getById(selectedAlchemySessionId, ALL_ALCHEMY_SESSIONS);
+  const headerText = selectedAlchemySession.sessionCategory + ': ' + selectedAlchemySession.name;
+
+  return headerText;
+}

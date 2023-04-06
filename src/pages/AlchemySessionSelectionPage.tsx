@@ -1,23 +1,40 @@
 import { IonAccordion, IonAccordionGroup, IonContent, IonHeader, IonItem, IonItemGroup, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { useEffect, useState } from 'react';
+import { combineLatest } from 'rxjs';
 import { alchemySessionService } from '../services/AlchemySessionService';
-import { ALL_ALCHEMY_SESSIONS } from '../utils/constants';
+import { dataManager } from '../services/DataManager';
+import { INavigationListGroupingViewmodel } from '../types/NavigationListGroupingViewmodel';
+import { ALL_ALCHEMY_SESSIONS, ALL_INGREDIENTS, ALL_RECIPES } from '../utils/constants';
 
+import { recipeService } from '../services/RecipeService';
+import { IAvailabilityOptionsSelection } from '../types/AvailabilityOptionsSelection';
 import './AlchemySessionSelectionPage.css';
 
 export const AlchemySessionSelectionPage: React.FC = () => {
-    const alchemySessionsViewmodel = alchemySessionService.getNavListViewmodels(ALL_ALCHEMY_SESSIONS);
+    const [alchemySessionViewmodels, setAlchemySessionViewmodels] = useState<INavigationListGroupingViewmodel[]>([]);
+
+    useEffect(() => {
+        const data$ = combineLatest([dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$]);
+        const subscription = data$.subscribe(([includedDLCIds, ingredientAvailabilityOptions]) => {
+            setAlchemySessionViewmodels(buildAvailableAlchemySessionViewmodels(includedDLCIds, ingredientAvailabilityOptions)); 
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        }
+    })
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Potion Types</IonTitle>
+                    <IonTitle><h1 className='ion-text-center ion-no-margin'>Potion Companion</h1></IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
                 <IonItem>What kind of potion would you like to brew?</IonItem>
                 <IonAccordionGroup multiple >
                     {
-                        alchemySessionsViewmodel.map(grouping => (
+                        alchemySessionViewmodels.map(grouping => (
                                 <IonAccordion value={grouping.groupingLabel} key={grouping.groupingLabel}>
                                     <IonItem slot='header' className='ion-text-uppercase text-color-primary'>
                                         <h4>{grouping.groupingLabel}</h4>
@@ -25,8 +42,8 @@ export const AlchemySessionSelectionPage: React.FC = () => {
                                     <IonItemGroup slot='content'>
                                     {
                                         grouping.items.map(item => (
-                                            <IonItem key={item.labelText} onClick={() => item.clickHandler()} detail={true} routerLink='/recipes' className='ion-padding-start'>
-                                                <IonLabel>{item.labelText}</IonLabel>
+                                            <IonItem key={item.labelText} onClick={() => item.clickHandler()} detail={true} routerLink='/recipes'>
+                                                <IonLabel className='ion-padding-start'>{item.labelText}</IonLabel>
                                             </IonItem>
                                         ))
                                     }
@@ -39,3 +56,13 @@ export const AlchemySessionSelectionPage: React.FC = () => {
         </IonPage>  
     )
 };
+
+function buildAvailableAlchemySessionViewmodels(includedDLCIds: number[], ingredientAvailabilityOptions: IAvailabilityOptionsSelection): INavigationListGroupingViewmodel[] {
+    const availableRecipes = recipeService.getAvailableRecipes(ALL_RECIPES, ALL_INGREDIENTS, includedDLCIds, ingredientAvailabilityOptions);
+    const availableAlchemySessions = ALL_ALCHEMY_SESSIONS.filter(session => {
+        return availableRecipes.some(session.filterRecipePredicate);
+    });
+    const viewmodel = alchemySessionService.getNavListViewmodels(availableAlchemySessions);
+
+    return viewmodel;
+}
