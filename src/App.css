@@ -15,6 +15,10 @@ ion-header h1 {
     font-size: 20px;
 }
 
+ion-header h2 {
+    font-size: 18px;
+}
+
 .display-flex {
     display: flex !important;
 }
