@@ -1,7 +1,6 @@
-import { IonContent, IonList, IonModal, IonPage } from '@ionic/react';
-import { useEffect, useRef, useState } from 'react';
+import { IonContent, IonList, IonPage } from '@ionic/react';
+import { useEffect, useState } from 'react';
 import { combineLatest, take } from 'rxjs';
-import { AboutPanel } from '../components/AboutPanel';
 import { EmptyListCTA } from '../components/EmptyListCTA';
 import { RecipeSummaryEntry } from '../components/RecipeSummaryEntry';
 import { StandardHeader } from '../components/StandardHeader';
@@ -12,13 +11,10 @@ import { IAvailabilityOptionsSelection } from '../types/AvailabilityOptionsSelec
 import { IRecipe } from '../types/Recipe';
 import { IRecipeSummaryViewmodel } from '../types/RecipeSummaryViewmodel';
 import { ALL_ALCHEMY_SESSIONS, ALL_INGREDIENTS, ALL_RECIPES } from '../utils/constants';
-import { DismissablePage } from './DismissablePage';
 
 export const RecipesPage: React.FC = () => {
   const [recipeSummaries, setRecipeSummaries] = useState<IRecipeSummaryViewmodel[]>([]);
   const [headerText, setHeaderText] = useState<string>('Potion Recipes');
-  const settingsModal = useRef<HTMLIonModalElement>(null);
-  const settingsToggleId = 'settings-toggle';
   
   useEffect(() => {
     const recipeState$ = combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$]);
@@ -55,7 +51,7 @@ export const RecipesPage: React.FC = () => {
 
   return (
     <IonPage>
-      <StandardHeader title={headerText} settingsToggleBtnId={settingsToggleId}></StandardHeader>
+      <StandardHeader title={headerText}></StandardHeader>
       <IonContent fullscreen>
         {
           recipeSummaries.length > 0
@@ -68,11 +64,6 @@ export const RecipesPage: React.FC = () => {
               </IonList> 
             : <EmptyListCTA listItemType='Recipe'></EmptyListCTA>
         }
-        <IonModal ref={settingsModal} trigger={settingsToggleId}>
-          <DismissablePage headerText='About' dismiss={() => (settingsModal.current?.dismiss())}>
-            <AboutPanel></AboutPanel>
-          </DismissablePage>
-        </IonModal>
       </IonContent>
     </IonPage>
   );

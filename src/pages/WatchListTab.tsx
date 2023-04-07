@@ -19,7 +19,6 @@ export const WatchListTab: React.FC = () => {
   const [present] = useIonActionSheet();
   const [ingredients, setIngredients] = useState<IIngredientViewmodel[]>([]);
   const [sortAlpha, setSortAlpha] = useState<boolean>(false);
-  const settingsToggleId = 'watchlist-settings-toggle';
 
   useEffect(() => {
     combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$, toggleSortAlpha$]).subscribe(([selectedRecipeIds, includedDLCIds, ingredientAvailabilityOptions, doSortAlpha]) => {
@@ -48,7 +47,7 @@ export const WatchListTab: React.FC = () => {
   
   return (
     <IonPage>
-      <StandardHeader title="Highest Value" settingsToggleBtnId={settingsToggleId}></StandardHeader>
+      <StandardHeader title="Highest Value"></StandardHeader>
       <IonContent>
         {
           ingredients?.length 

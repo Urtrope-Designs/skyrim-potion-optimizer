@@ -4,16 +4,16 @@ import { close } from "ionicons/icons";
 interface DismissablePageProps {
     children: React.ReactNode;
     headerText: string;
-    dismiss?: () => void;
+    onDismiss?: () => void;
 }
 
-export const DismissablePage: React.FC<DismissablePageProps> = ({children, headerText, dismiss}) => (
+export const DismissablePage: React.FC<DismissablePageProps> = ({children, headerText, onDismiss}) => (
     <IonPage>
         <IonHeader>
             <IonToolbar>
-                {dismiss && 
+                {onDismiss && 
                     <IonButtons slot='end'>
-                        <IonButton onClick={dismiss}>
+                        <IonButton onClick={onDismiss}>
                             <IonIcon slot='icon-only' icon={close}></IonIcon>
                         </IonButton>
                     </IonButtons>
