@@ -1,5 +1,5 @@
 import { IonBackButton, IonButton, IonButtons, IonHeader, IonIcon, IonToolbar } from "@ionic/react";
-import { settings } from "ionicons/icons";
+import { informationCircleOutline } from "ionicons/icons";
 
 import './StandardHeader.css';
 
@@ -18,7 +18,7 @@ export const StandardHeader: React.FC<StandardHeaderProps> = ({title, settingsTo
                 <h2 className='header-title'>{title}</h2>
                 <IonButtons slot='end'>
                     <IonButton id={settingsToggleBtnId}>
-                        <IonIcon color='primary' slot='icon-only' icon={settings}></IonIcon>
+                        <IonIcon color='primary' slot='icon-only' icon={informationCircleOutline}></IonIcon>
                     </IonButton>
                 </IonButtons>
             </IonToolbar>

@@ -1,6 +1,6 @@
 import { Color } from '@ionic/core';
 import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonThumbnail } from '@ionic/react';
-import { ban, informationCircleOutline } from 'ionicons/icons';
+import { ban, helpCircleOutline } from 'ionicons/icons';
 import { useRef, useState } from 'react';
 import { IIngredientViewmodel } from '../types/IngredientViewmodel';
 
@@ -32,7 +32,7 @@ export const IngredientSummaryEntry: React.FC<IngredientSummaryEntryProps> = ({i
                     <IonLabel>
                         <h2>{ ingredientSummary.ingredientName }</h2>
                     </IonLabel>
-                    <IonIcon slot='end' icon={informationCircleOutline} className={'ingredientSummary_showMoreButton' + (isDetailShown ? ' ingredientSummary_showMoreButton-detailShown' : '')}/>
+                    <IonIcon slot='end' icon={helpCircleOutline} className={'ingredientSummary_showMoreButton' + (isDetailShown ? ' ingredientSummary_showMoreButton-detailShown' : '')}/>
                 </IonItem>
                 <IonItemOptions onIonSwipe={() => handleRemoveIngredient(ingredientSummary)}>
                     <IonItemOption expandable color={slideOptionColor ?? 'secondary'} onClick={() => handleRemoveIngredient(ingredientSummary)}>

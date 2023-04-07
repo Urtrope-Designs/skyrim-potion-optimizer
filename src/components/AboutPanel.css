@@ -1,0 +1,10 @@
+.aboutPanel-wrapper {
+    text-align: justify;
+}
+
+.aboutPanel-separator {
+    background: var(--ion-color-primary);
+    height: 2px;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}

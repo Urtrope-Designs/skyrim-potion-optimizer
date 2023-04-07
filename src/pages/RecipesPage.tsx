@@ -1,17 +1,18 @@
 import { IonContent, IonList, IonModal, IonPage } from '@ionic/react';
 import { useEffect, useRef, useState } from 'react';
 import { combineLatest, take } from 'rxjs';
+import { AboutPanel } from '../components/AboutPanel';
 import { EmptyListCTA } from '../components/EmptyListCTA';
 import { RecipeSummaryEntry } from '../components/RecipeSummaryEntry';
 import { StandardHeader } from '../components/StandardHeader';
 import { alchemySessionService } from '../services/AlchemySessionService';
 import { dataManager } from '../services/DataManager';
 import { recipeService } from '../services/RecipeService';
+import { IAvailabilityOptionsSelection } from '../types/AvailabilityOptionsSelection';
 import { IRecipe } from '../types/Recipe';
 import { IRecipeSummaryViewmodel } from '../types/RecipeSummaryViewmodel';
 import { ALL_ALCHEMY_SESSIONS, ALL_INGREDIENTS, ALL_RECIPES } from '../utils/constants';
-import { UserSettings } from '../components/UserSettings';
-import { IAvailabilityOptionsSelection } from '../types/AvailabilityOptionsSelection';
+import { DismissablePage } from './DismissablePage';
 
 export const RecipesPage: React.FC = () => {
   const [recipeSummaries, setRecipeSummaries] = useState<IRecipeSummaryViewmodel[]>([]);
@@ -68,7 +69,9 @@ export const RecipesPage: React.FC = () => {
             : <EmptyListCTA listItemType='Recipe'></EmptyListCTA>
         }
         <IonModal ref={settingsModal} trigger={settingsToggleId}>
-          <UserSettings dismiss={() => (settingsModal.current?.dismiss())}></UserSettings>
+          <DismissablePage headerText='About' dismiss={() => (settingsModal.current?.dismiss())}>
+            <AboutPanel></AboutPanel>
+          </DismissablePage>
         </IonModal>
       </IonContent>
     </IonPage>
