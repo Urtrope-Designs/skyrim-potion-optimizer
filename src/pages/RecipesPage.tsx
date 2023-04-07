@@ -49,6 +49,12 @@ export const RecipesPage: React.FC = () => {
     }
   }
 
+  const restartSession = () => {
+    dataManager.selectedAlchemySessionId$.pipe(take(1)).subscribe(alchemySessionId => {
+      dataManager.updateAlchemySessionSelection(alchemySessionId);
+    });
+  }
+
   return (
     <IonPage>
       <StandardHeader title={headerText}></StandardHeader>
@@ -62,7 +68,7 @@ export const RecipesPage: React.FC = () => {
                   })
                 }
               </IonList> 
-            : <EmptyListCTA listItemType='Recipe'></EmptyListCTA>
+            : <EmptyListCTA listItemType='Recipe' restartCallback={restartSession}></EmptyListCTA>
         }
       </IonContent>
     </IonPage>
