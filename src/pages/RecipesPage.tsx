@@ -1,5 +1,5 @@
-import { IonContent, IonList, IonModal, IonPage } from '@ionic/react';
-import { useEffect, useRef, useState } from 'react';
+import { IonContent, IonList, IonPage } from '@ionic/react';
+import { useEffect, useState } from 'react';
 import { combineLatest, take } from 'rxjs';
 import { EmptyListCTA } from '../components/EmptyListCTA';
 import { RecipeSummaryEntry } from '../components/RecipeSummaryEntry';
@@ -7,17 +7,14 @@ import { StandardHeader } from '../components/StandardHeader';
 import { alchemySessionService } from '../services/AlchemySessionService';
 import { dataManager } from '../services/DataManager';
 import { recipeService } from '../services/RecipeService';
+import { IAvailabilityOptionsSelection } from '../types/AvailabilityOptionsSelection';
 import { IRecipe } from '../types/Recipe';
 import { IRecipeSummaryViewmodel } from '../types/RecipeSummaryViewmodel';
 import { ALL_ALCHEMY_SESSIONS, ALL_INGREDIENTS, ALL_RECIPES } from '../utils/constants';
-import { UserSettings } from '../components/UserSettings';
-import { IAvailabilityOptionsSelection } from '../types/AvailabilityOptionsSelection';
 
 export const RecipesPage: React.FC = () => {
   const [recipeSummaries, setRecipeSummaries] = useState<IRecipeSummaryViewmodel[]>([]);
   const [headerText, setHeaderText] = useState<string>('Potion Recipes');
-  const settingsModal = useRef<HTMLIonModalElement>(null);
-  const settingsToggleId = 'settings-toggle';
   
   useEffect(() => {
     const recipeState$ = combineLatest([dataManager.selectedRecipeIds$, dataManager.includedDLCIds$, dataManager.ingredientAvailabilityOptions$]);
@@ -54,7 +51,7 @@ export const RecipesPage: React.FC = () => {
 
   return (
     <IonPage>
-      <StandardHeader title={headerText} settingsToggleBtnId={settingsToggleId}></StandardHeader>
+      <StandardHeader title={headerText}></StandardHeader>
       <IonContent fullscreen>
         {
           recipeSummaries.length > 0
@@ -67,9 +64,6 @@ export const RecipesPage: React.FC = () => {
               </IonList> 
             : <EmptyListCTA listItemType='Recipe'></EmptyListCTA>
         }
-        <IonModal ref={settingsModal} trigger={settingsToggleId}>
-          <UserSettings dismiss={() => (settingsModal.current?.dismiss())}></UserSettings>
-        </IonModal>
       </IonContent>
     </IonPage>
   );

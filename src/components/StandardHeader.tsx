@@ -1,24 +1,41 @@
-import { IonBackButton, IonButton, IonButtons, IonHeader, IonIcon, IonToolbar } from "@ionic/react";
-import { settings } from "ionicons/icons";
+import { IonBackButton, IonButton, IonButtons, IonHeader, IonIcon, IonToolbar, useIonModal } from "@ionic/react";
+import { informationCircleOutline } from "ionicons/icons";
+import { DismissablePage } from "../pages/DismissablePage";
+import { AboutPanel } from "./AboutPanel";
 
 import './StandardHeader.css';
 
-interface StandardHeaderProps {
+interface StandardHeaderBaseProps {
+    showBackButton?: boolean;
+}
+interface StandardHeaderWithTitleProps extends StandardHeaderBaseProps {
     title: string;
-    settingsToggleBtnId: string;
+    children?: never;
+} 
+interface StandardHeaderWithChildrenProps extends StandardHeaderBaseProps {
+    children: React.ReactNode;
+    title?: never;
 }
 
-export const StandardHeader: React.FC<StandardHeaderProps> = ({title, settingsToggleBtnId}) => {
-    return ( 
+export const StandardHeader: React.FC<StandardHeaderWithTitleProps | StandardHeaderWithChildrenProps> = ({children, title, showBackButton = true}) => {
+    const [present, dismiss] = useIonModal(DismissablePage, {
+            onDismiss: () => dismiss(),
+            headerText: 'About',
+            children: <AboutPanel></AboutPanel>,
+        });
+
+    return (
         <IonHeader>
             <IonToolbar className='flex'>
-                <IonButtons slot='start'>
-                    <IonBackButton text='' defaultHref='/select'></IonBackButton>
-                </IonButtons>
-                <h2 className='header-title'>{title}</h2>
+                {showBackButton && 
+                    <IonButtons slot='start'>
+                        <IonBackButton text='' defaultHref='/select'></IonBackButton>
+                    </IonButtons>
+                }
+                { children ?? <h2 className='header-title'>{title}</h2> }
                 <IonButtons slot='end'>
-                    <IonButton id={settingsToggleBtnId}>
-                        <IonIcon color='primary' slot='icon-only' icon={settings}></IonIcon>
+                    <IonButton onClick={() => present()}>
+                        <IonIcon color='primary' slot='icon-only' icon={informationCircleOutline}></IonIcon>
                     </IonButton>
                 </IonButtons>
             </IonToolbar>

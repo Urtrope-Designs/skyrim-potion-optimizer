@@ -1,4 +1,4 @@
-import { IonAccordion, IonAccordionGroup, IonContent, IonHeader, IonItem, IonItemGroup, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonAccordion, IonAccordionGroup, IonContent, IonItem, IonItemGroup, IonLabel, IonPage, IonTitle } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import { combineLatest } from 'rxjs';
 import { alchemySessionService } from '../services/AlchemySessionService';
@@ -6,6 +6,7 @@ import { dataManager } from '../services/DataManager';
 import { INavigationListGroupingViewmodel } from '../types/NavigationListGroupingViewmodel';
 import { ALL_ALCHEMY_SESSIONS, ALL_INGREDIENTS, ALL_RECIPES } from '../utils/constants';
 
+import { StandardHeader } from '../components/StandardHeader';
 import { recipeService } from '../services/RecipeService';
 import { IAvailabilityOptionsSelection } from '../types/AvailabilityOptionsSelection';
 import './AlchemySessionSelectionPage.css';
@@ -25,11 +26,9 @@ export const AlchemySessionSelectionPage: React.FC = () => {
     })
     return (
         <IonPage>
-            <IonHeader>
-                <IonToolbar>
+            <StandardHeader showBackButton={false}>
                     <IonTitle><h1 className='ion-text-center ion-no-margin'>Potion Companion</h1></IonTitle>
-                </IonToolbar>
-            </IonHeader>
+            </StandardHeader>
             <IonContent>
                 <IonItem>What kind of potion would you like to brew?</IonItem>
                 <IonAccordionGroup multiple >
