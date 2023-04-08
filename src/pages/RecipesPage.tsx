@@ -12,6 +12,8 @@ import { IRecipe } from '../types/Recipe';
 import { IRecipeSummaryViewmodel } from '../types/RecipeSummaryViewmodel';
 import { ALL_ALCHEMY_SESSIONS, ALL_INGREDIENTS, ALL_RECIPES } from '../utils/constants';
 
+import './RecipesPage.css';
+
 export const RecipesPage: React.FC = () => {
   const [recipeSummaries, setRecipeSummaries] = useState<IRecipeSummaryViewmodel[]>([]);
   const [headerText, setHeaderText] = useState<string>('Potion Recipes');
@@ -45,9 +47,9 @@ export const RecipesPage: React.FC = () => {
         const filteredRecipes = recipes.filter(r => !(exhaustedIngredientIds.some(ingredientId => r.ingredientIds.includes(ingredientId))) && !(r.id === recipeId));
         const filteredRecipeIds = filteredRecipes.map(r => r.id);
         dataManager.setSelectedRecipeIds(filteredRecipeIds);
-      });
-    }
-  }
+      });  
+    }  
+  }  
 
   const restartSession = () => {
     dataManager.selectedAlchemySessionId$.pipe(take(1)).subscribe(alchemySessionId => {
@@ -61,11 +63,11 @@ export const RecipesPage: React.FC = () => {
       <IonContent fullscreen>
         {
           recipeSummaries.length > 0
-            ? <IonList>
+            ? <IonList class='recipesList'>
                 {
-                  recipeSummaries.map(recipe => {
-                    return <RecipeSummaryEntry key={recipe.recipeId} recipeSummary={recipe} removeRecipe={confirmRemoveRecipe}></RecipeSummaryEntry>
-                  })
+                  recipeSummaries.map(recipe => (
+                    <RecipeSummaryEntry key={recipe.recipeId} recipeSummary={recipe} removeRecipe={confirmRemoveRecipe}></RecipeSummaryEntry>
+                  ))
                 }
               </IonList> 
             : <EmptyListCTA listItemType='Recipe' restartCallback={restartSession}></EmptyListCTA>

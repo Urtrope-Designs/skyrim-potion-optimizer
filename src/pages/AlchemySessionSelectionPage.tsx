@@ -23,7 +23,8 @@ export const AlchemySessionSelectionPage: React.FC = () => {
         return () => {
             subscription.unsubscribe();
         }
-    })
+    }, []);
+
     return (
         <IonPage>
             <StandardHeader showBackButton={false}>

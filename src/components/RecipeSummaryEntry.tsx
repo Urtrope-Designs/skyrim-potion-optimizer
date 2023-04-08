@@ -1,6 +1,6 @@
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonLabel, IonList } from '@ionic/react';
 import { arrowUndoOutline, ban } from 'ionicons/icons';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { IIngredientViewmodel } from '../types/IngredientViewmodel';
 import { IRecipeSummaryViewmodel } from '../types/RecipeSummaryViewmodel';
 import { IngredientSummaryEntry } from './IngredientSummaryEntry';
@@ -15,6 +15,10 @@ interface RecipeSummaryEntryProps {
 export const RecipeSummaryEntry: React.FC<RecipeSummaryEntryProps> = ({ recipeSummary, removeRecipe }) => {
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<number[]>([]);
   const [ingredientIdsUpdating, setIngredientIdsUpdating] = useState<number[]>([]);
+  const [isRemoving, setIsRemoving] = useState<boolean>(false);
+  const removeAnimDurationMs = 1000;
+  const rootRef = useRef<HTMLIonCardElement>(null);
+
   function toggleIngredientSelection(ingredientToToggle: IIngredientViewmodel) {
     const removeNewId = selectedIngredientIds.includes(ingredientToToggle.ingredientId);
     const resultingSelectedIngredientIds = removeNewId ? selectedIngredientIds.filter(id => id !== ingredientToToggle.ingredientId) : [...selectedIngredientIds, ingredientToToggle.ingredientId];
@@ -26,8 +30,17 @@ export const RecipeSummaryEntry: React.FC<RecipeSummaryEntryProps> = ({ recipeSu
     }, 400);
   }
 
+  function markForRemoval() {
+    setIsRemoving(true);
+    const animHeight = rootRef.current ? `-${rootRef.current.clientHeight + parseInt(window.getComputedStyle(rootRef.current).marginTop)}px` : '100%';
+    document.documentElement.style.setProperty('--item-removal-anim-height', animHeight);
+    setTimeout(() => {
+      removeRecipe(recipeSummary.recipeId, selectedIngredientIds);
+    }, removeAnimDurationMs);
+  }
+
   return (
-    <IonCard>
+    <IonCard ref={rootRef} className={`recipeSummaryEntry${isRemoving ? ' removing' : ''}`} style={{'--remove-anim-duration': removeAnimDurationMs + 'ms'}}>
       <IonCardHeader>
         <IonCardTitle>
           <h2 className='ion-no-margin'><IonLabel>Potion of {recipeSummary.recipeName}</IonLabel></h2>
@@ -52,7 +65,7 @@ export const RecipeSummaryEntry: React.FC<RecipeSummaryEntryProps> = ({ recipeSu
           }
         </IonList>
         <div className='ion-padding-top ion-text-end'>
-          <IonButton color='secondary' size='small' onClick={() => removeRecipe(recipeSummary.recipeId, selectedIngredientIds)}>Done</IonButton>
+          <IonButton color='secondary' size='small' onClick={() => markForRemoval()}>Done</IonButton>
         </div>
       </IonCardContent>
     </IonCard>
