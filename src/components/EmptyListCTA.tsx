@@ -1,15 +1,14 @@
-import { IonRouterLink } from "@ionic/react";
+import { IonLabel } from "@ionic/react";
 
 interface EmptyListCTAProps {
     listItemType: string;
+    restartCallback: () => void;
 }
 
-export const EmptyListCTA: React.FC<EmptyListCTAProps> = ({listItemType}) => (
+export const EmptyListCTA: React.FC<EmptyListCTAProps> = ({listItemType, restartCallback}) => (
     <p className='ion-padding'>
-        Looks like you've worked through all the { listItemType }s in your selected Alchemy session. 
+        Looks like you've worked through all the { listItemType }s that you selected. 
         <br /><br />
-        Tap the "Potion" icon above or 
-            <IonRouterLink routerLink='/select' color='primary'> start a new potion brewing session</IonRouterLink>
-        !
+        <IonLabel color='primary' onClick={() => restartCallback()}>Restart your selected list</IonLabel> or click the back arrow above to select a new type of potion to brew!
     </p>
 )

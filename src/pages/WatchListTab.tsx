@@ -67,7 +67,7 @@ export const WatchListTab: React.FC = () => {
                   ))
                 }
               </IonList>
-            : <EmptyListCTA listItemType='Ingredient'></EmptyListCTA>
+            : <EmptyListCTA listItemType='Ingredient' restartCallback={() => {}}></EmptyListCTA>
         }
       </IonContent>
     </IonPage>

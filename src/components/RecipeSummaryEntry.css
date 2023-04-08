@@ -12,3 +12,20 @@ ion-card {
     margin-top: var(--margin-top);
     margin-bottom: var(--margin-bottom);
 }
+
+.recipeSummaryEntry {
+    position: relative;
+    transition: none;
+}
+
+.recipeSummaryEntry.removing {
+    transform: translateX(-100vw);
+    opacity: 0;
+    transition: transform 800ms ease, opacity 1000ms ease;
+}
+
+.recipeSummaryEntry.removing ~ .recipeSummaryEntry {
+    transform: translateY(var(--item-removal-anim-height));
+    transition: transform 500ms ease-out;
+    transition-delay: 400ms;
+}
