@@ -10,6 +10,6 @@ export const AboutPanel: React.FC = () => (
         <p>Content/Data/Calculations for this app (including images) were pulled from the "Alchemy Effects" and other articles on the <a href='https://en.uesp.net/wiki/Skyrim:Alchemy_Effects' target='_blank' rel='noreferrer noopener'>Unofficial Elder Scrolls Pages</a> wiki, as well as Bethesda's official Creation Kit tool.</p>
         <hr className='aboutPanel-separator'></hr>
         <p>This app was lovingly crafted by <a href="https://urtropedesigns.com/" target="_blank" rel="noreferrer noopener">Urtrope Designs</a>.</p>
-        {/* <p>For those concerned with privacy: this app never captures or records any personally identifying data whatsoever. There's nothing more to say, but if you want to read a little more about it, feel free to read my <a href="https://urtropedesigns.com/about/privacy-policy-potion-companion" target="_blank" rel="noreferrer noopener">privacy policy</a>.</p> */}
+        <p>For those concerned with privacy: this app never captures or records any personally identifying data whatsoever. There's nothing more to say, but if you want to read it again in a different context, feel free to read my <a href="https://urtropedesigns.com/about/privacy-policy-potion-companion" target="_blank" rel="noreferrer noopener">privacy policy</a>.</p>
     </div>
 )
